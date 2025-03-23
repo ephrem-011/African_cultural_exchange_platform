@@ -14,3 +14,10 @@ class Like(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['user_id', 'post_id'], name='unique_like')
         ]
+class Comment(models.Model):
+    user_id = models.ForeignKey(userProfiles, on_delete=models.CASCADE)
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user_id', 'post_id', 'created_at'], name = 'unique_comment')]
