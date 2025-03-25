@@ -1,10 +1,10 @@
 <html>
     <body>
-            <head><h1>Edit user details</h1></head>
-            <form method="post">
+            <head><h1>Edit post details</h1></head>
+            <form method="post" enctype="multipart/form-data">
                 {%csrf_token%}
                 {{form.as_p}}
                 <button type="submit">Finish</button>
             </form>
-    </body>
+    </body>s
 </html>

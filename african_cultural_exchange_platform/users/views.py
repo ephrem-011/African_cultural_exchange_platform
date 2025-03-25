@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.views.generic import *
 from django.contrib.auth.forms import *
 from users.models import *
+from posts.models import *
 
 class customUserCreationForm(UserCreationForm):
     class Meta:
@@ -27,5 +28,10 @@ class EditUserView(UpdateView):
     template_name = 'users/templates/update_user.html'
 
 class dashboard(DetailView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        myposts = Post.objects.filter(user_id = self.object.pk)
+        context['myposts'] = myposts
+        return context
     model = userProfiles
     template_name = 'users/templates/dashboard.html'

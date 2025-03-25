@@ -8,7 +8,7 @@ class event(models.Model):
     location = models.CharField(max_length=200)
     date_time = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
-class atendee(models.Model):
+class attendee(models.Model):
     user_id = models.ForeignKey(userProfiles, on_delete=models.CASCADE)
     event_id = models.ForeignKey(event, on_delete=models.CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)

@@ -12,4 +12,11 @@ class ViewPost(DetailView):
     model = Post
     template_name = 'posts/templates/post_detail.html'
 
+class UpdatePost(UpdateView):
+    model = Post
+    fields = '__all__'
+    success_url = '/admin'
+    template_name = 'posts/templates/update_post.html'
+
+
     
