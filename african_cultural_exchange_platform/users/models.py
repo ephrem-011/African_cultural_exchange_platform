@@ -14,9 +14,9 @@ class customUserManager (BaseUserManager):
 class userProfiles(AbstractBaseUser, PermissionsMixin):
     FirstName = models.CharField(max_length=150)
     LastName = models.CharField(max_length=150)
-    username = models.CharField(max_length=20, unique=True)
+    username = models.CharField(max_length=20, unique=True, null=True, blank=True)
     email = models.CharField(max_length=150, unique=True)
-    date_joined = models.DateField(auto_now_add=True)
+    datetime_joined = models.DateTimeField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
 
     objects = customUserManager

@@ -1,0 +1,10 @@
+<html>
+<head> <h1>Sign up form for African cultural exchange platform</h1></head>
+<body>
+    <form method="POST">
+        {%csrf_token%}
+        {{form.as_p}}
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
