@@ -1,6 +1,11 @@
 <html>
     <head><h1>{{object.FirstName}}'s dashboard</h1></head>
     <body>
-        <h2>{{myposts}}</h2>
+        {%csrf_token%}
+        {%for post in myposts%}
+        <li><a href="{% url 'viewpost' pk=post.pk %}">{{post.Title}}</a></li>
+        <li><img src="{{post.image.url}}" alt="{{post.Title}}"> </li>
+        {%endfor%}
+        <a href="{% url 'newpost' %}">Add new post</a>
     </body>
 </html>

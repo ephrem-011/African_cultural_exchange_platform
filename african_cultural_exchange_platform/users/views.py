@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.views import *
 from django.views.generic import *
 from django.contrib.auth.forms import *
 from users.models import *
 from posts.models import *
+from django.contrib.auth import logout
+from django.contrib.auth.mixins import *
 
 class customUserCreationForm(UserCreationForm):
     class Meta:
@@ -27,11 +30,25 @@ class EditUserView(UpdateView):
         return reverse('dashboard', kwargs = {'pk':self.object.pk})
     template_name = 'users/templates/update_user.html'
 
-class dashboard(DetailView):
+class dashboard(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        myposts = Post.objects.filter(user_id = self.object.pk)
-        context['myposts'] = myposts
-        return context
+        validPK = self.object.pk == self.request.user.pk
+        if validPK:
+            myposts = Post.objects.filter(user_id = self.request.user.pk)
+            context['myposts'] = myposts
+            return context
+        else:
+            raise KeyError ("You're not authorized")
     model = userProfiles
     template_name = 'users/templates/dashboard.html'
+
+class CustomLoginView(LoginView):
+    model = userProfiles
+    template_name = 'users/templates/login.html'
+    def get_success_url(self):
+        return reverse("dashboard", kwargs={"pk": self.request.user.pk})
+    
+def logout_view(request):
+    logout(request)
+    return redirect('login')

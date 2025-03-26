@@ -1,12 +1,20 @@
 from django.shortcuts import render, redirect, reverse
 from django.views.generic import *
 from posts.models import *
+from users.models import *
+from django.contrib.auth.mixins import *
 
-class AddPost(CreateView):
+class AddPost(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['Title', 'content', 'image']
     template_name = 'posts/templates/add_post.html'
-    success_url = '/admin'
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('dashboard', kwargs = {'pk':self.request.user.id})
 
 class ViewPost(DetailView):
     model = Post
