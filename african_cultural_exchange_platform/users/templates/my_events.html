@@ -1,0 +1,11 @@
+<html>
+    <head>
+        <h1>Your events</h1>
+        <ul><a href="{% url 'logout' %}">Log out</a></ul>
+    </head>
+    <body>
+        {%for event in object_list%}
+        <ul>{{event.title}}</ul>
+        {%endfor%}
+    </body>
+</html>

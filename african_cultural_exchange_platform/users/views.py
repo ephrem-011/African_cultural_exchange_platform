@@ -4,6 +4,7 @@ from django.views.generic import *
 from django.contrib.auth.forms import *
 from users.models import *
 from posts.models import *
+from events.models import *
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import *
 from django.core.exceptions import PermissionDenied
@@ -49,8 +50,26 @@ class CustomLoginView(LoginView):
     model = userProfiles
     template_name = 'users/templates/login.html'
     def get_success_url(self):
-        return reverse("dashboard", kwargs={"pk": self.request.user.pk})
+        return reverse("feed")
+    
+class MyEvents (ListView):
+    model = userProfiles
+    def get_queryset(self):
+        context_object_name = 'myevents'
+        return event.objects.filter(creator_id = self.request.user.pk)
+    template_name = 'users/templates/my_events.html'
     
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+class Feed(LoginRequiredMixin, ListView):
+    model = userProfiles
+    def get_queryset(self):
+        return Post.objects.all()
+    
+    def like_count (self):
+        likes = Like.objects.count()
+        return likes
+    
+    template_name = 'users/templates/feed.html'

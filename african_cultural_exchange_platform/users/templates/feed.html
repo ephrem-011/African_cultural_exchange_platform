@@ -1,18 +1,23 @@
 <html>
     <head>
-        <h1>{{object.FirstName}}'s dashboard</h1> 
+        <a href="{% url 'dashboard' pk=request.user.pk%}">My dashboard</a>
         <a href="{% url 'newpost' %}">Add new post</a>
-        <a href="{% url 'logout' %}">Log out</a>
         <a href="{% url 'edit_user' pk=request.user.pk %}">Update my info</a>
         <a href="{% url 'addevent'%}">Create an event</a>
         <a href="{% url 'myevents' pk=request.user.pk %}">My events</a>
         <a href="{% url 'eventlist' %}">Events</a>
+        <a href="{% url 'logout' %}">Log out</a>
+
     </head>
     <body>
-        {%for post in myposts%}
+        {%for post in object_list%}
         <ul></ul>
         <h1><ul><a href="{% url 'viewpost' pk=post.pk %}">{{post.Title}}</a></ul></h1>
         <ul><img src="{{post.image.url}}" alt="{{post.Title}}"> </ul>
+        <ul>
+            <a href="{% url 'like' pk=post.pk%}">Like</a> 
+            <a href="{% url 'comment' pk=post.pk%}">Comment</a>
+        </ul>
         {%endfor%}
     </body>
 </html>

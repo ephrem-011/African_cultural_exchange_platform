@@ -1,0 +1,8 @@
+<html>
+    <head><h1>Your events</h1></head>
+    <body>
+        {% for event in object_list %}
+        <ul>{{event.title}} <a href="{% url 'joinevent' pk=event.pk%}">Join event</a></ul>
+        {%endfor%}
+    </body>
+</html>

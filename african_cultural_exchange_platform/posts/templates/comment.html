@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <img src="{{image}}" alt="">
+        {%for comment in object_list%}
+        <li>{{comment.text}}</li>
+        {%endfor%}
+        <form method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+            {{form.as_p}}
+            <button type="submit">Comment</button>
+        </form>
+    </body>
+</html>
