@@ -33,12 +33,12 @@ class EditUserView(UpdateView):
 
 class dashboard(LoginRequiredMixin, DetailView):
     def get_context_data(self,**kwargs):
-        if not self.request.user.is_authenticated:
-            raise PermissionDenied("You're not authorized to access another user's dashboard.")
-        
         context = super().get_context_data(**kwargs)
-        myposts = Post.objects.filter(user_id = self.request.user.pk)
-        context['myposts'] = myposts
+        urlPK =  self.kwargs.get('pk')
+        if urlPK != self.request.user.pk:
+            raise PermissionDenied("You're not authorized to access another user's dashboard.")
+         
+        context['myposts'] = Post.objects.filter(user_id = self.request.user.pk)
         return context
 
     model = userProfiles
