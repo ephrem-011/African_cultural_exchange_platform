@@ -6,6 +6,7 @@ from users.models import *
 from posts.models import *
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import *
+from django.core.exceptions import PermissionDenied
 
 class customUserCreationForm(UserCreationForm):
     class Meta:
@@ -31,15 +32,15 @@ class EditUserView(UpdateView):
     template_name = 'users/templates/update_user.html'
 
 class dashboard(LoginRequiredMixin, DetailView):
-    def get_context_data(self, **kwargs):
+    def get_context_data(self,**kwargs):
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied("You're not authorized to access another user's dashboard.")
+        
         context = super().get_context_data(**kwargs)
-        validPK = self.object.pk == self.request.user.pk
-        if validPK:
-            myposts = Post.objects.filter(user_id = self.request.user.pk)
-            context['myposts'] = myposts
-            return context
-        else:
-            raise KeyError ("You're not authorized")
+        myposts = Post.objects.filter(user_id = self.request.user.pk)
+        context['myposts'] = myposts
+        return context
+
     model = userProfiles
     template_name = 'users/templates/dashboard.html'
 
