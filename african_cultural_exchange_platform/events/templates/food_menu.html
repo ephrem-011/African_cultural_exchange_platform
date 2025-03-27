@@ -1,0 +1,13 @@
+<html>
+    <head><h1>Foods menu</h1></head>
+    <body>
+        {%csrf_token%}
+        {%for food in food_list%}
+        <li>{{food.name}} for {{food.price}} ETB      <a href="{% url 'upd' pk=food.pk %}">Update</a></li>
+        {%endfor%}
+        <form method="post" action="{% url 'logout' %}">
+            {%csrf_token%}
+            <button type="submit">logout</button>
+        </form>
+    </body>
+</html>

@@ -1,11 +1,16 @@
 <html>
-    <head><h1>{{object.FirstName}}'s dashboard</h1></head>
-    <body>
-        {%csrf_token%}
-        {%for post in myposts%}
-        <li><a href="{% url 'viewpost' pk=post.pk %}">{{post.Title}}</a></li>
-        <li><img src="{{post.image.url}}" alt="{{post.Title}}"> </li>
-        {%endfor%}
+    <head>
+        <h1>{{object.FirstName}}'s dashboard</h1> 
         <a href="{% url 'newpost' %}">Add new post</a>
+        <a href="{% url 'logout' %}">Log out</a>
+        <a href="{% url 'edit_user' pk=request.user.pk %}">Update my info</a>
+        <a href="{% url 'addevent'%}">Create an event</a>
+    </head>
+    <body>
+        {%for post in myposts%}
+        <ul></ul>
+        <h1><ul><a href="{% url 'viewpost' pk=post.pk %}">{{post.Title}}</a></ul></h1>
+        <ul><img src="{{post.image.url}}" alt="{{post.Title}}"> </ul>
+        {%endfor%}
     </body>
 </html>

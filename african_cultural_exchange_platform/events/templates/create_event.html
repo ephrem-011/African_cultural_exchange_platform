@@ -1,0 +1,10 @@
+<html>
+    <head><h1>Add Post</h1></head>
+    <body>
+        <form method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+            {{form.as_p}}
+            <button type="submit">Post</button>
+        </form>
+    </body>
+</html>

@@ -3,6 +3,7 @@ from django.views.generic import *
 from posts.models import *
 from users.models import *
 from django.contrib.auth.mixins import *
+from django.core.exceptions import PermissionDenied
 
 class AddPost(LoginRequiredMixin, CreateView):
     model = Post
@@ -25,6 +26,13 @@ class UpdatePost(UpdateView):
     fields = '__all__'
     success_url = '/admin'
     template_name = 'posts/templates/update_post.html'
+
+class LikeView(CreateView):
+    model = Like
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user
+        form.instance.post_id = self.request.post
+        return super().form_valid(form)
 
 
     
