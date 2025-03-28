@@ -32,16 +32,10 @@ class UpdatePost(UpdateView):
     success_url = '/admin'
     template_name = 'posts/templates/update_post.html'
 
-class LikeView(CreateView):
-    model = Like
-    fields = []
-    template_name = 'posts/templates/like.html'
-    def form_valid(self, form):
-        form.instance.user_id = self.request.user
-        form.instance.post_id = Post.objects.get(id = self.kwargs['pk'])
-        return super().form_valid(form)
-    def get_success_url(self):
-        return reverse ('feed')
+class LikeView(View):
+    def dispatch(self, request, *args, **kwargs):
+        Like.objects.create(user_id = self.request.user, post_id = Post.get.object(id = self.kwargs['pk']))
+        return redirect ('feed')
     
 class CommentView(LoginRequiredMixin, CreateView, ListView):
     model = Comment
