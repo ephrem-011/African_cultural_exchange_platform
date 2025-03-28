@@ -3,5 +3,10 @@
     <body>
         <p>{{object.content}}</p>
         <img src="{{ object.image.url }}" alt="{{ object.Title }}">
+        <ul><a href="{% url 'like' pk=object.pk %}">Like</a> {{likes}}</ul>
+        <h2>Comments</h2>
+        {% for comment in comments %}
+        <ul>{{comment.text}}</ul>
+        {%endfor%}
     </body>
 </html>

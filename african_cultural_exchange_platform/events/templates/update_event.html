@@ -1,7 +1,7 @@
 <html>
     <body>
-            <head><h1>Edit post details</h1></head>
-            <form method="post" enctype="multipart/form-data">
+            <head><h1>Edit event details</h1></head>
+            <form method="post">
                 {%csrf_token%}
                 {{form.as_p}}
                 <button type="submit">Finish</button>

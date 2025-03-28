@@ -5,7 +5,7 @@
     </head>
     <body>
         {%for event in object_list%}
-        <ul>{{event.title}}</ul>
+        <ul>{{event.title}} <a href="{% url 'update_event' pk=event.pk%}"> Update </a> </ul>
         {%endfor%}
     </body>
 </html>

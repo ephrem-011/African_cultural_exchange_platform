@@ -9,6 +9,13 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import *
 from django.core.exceptions import PermissionDenied
 
+
+class HomeView(View):
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect ('feed')
+        else:
+            return redirect ('login')
 class customUserCreationForm(UserCreationForm):
     class Meta:
         model = userProfiles
@@ -49,27 +56,14 @@ class dashboard(LoginRequiredMixin, DetailView):
 class CustomLoginView(LoginView):
     model = userProfiles
     template_name = 'users/templates/login.html'
-    def get_success_url(self):
+    def get_success_url(self):   
         return reverse("feed")
-    
-class MyEvents (ListView):
-    model = userProfiles
-    def get_queryset(self):
-        context_object_name = 'myevents'
-        return event.objects.filter(creator_id = self.request.user.pk)
-    template_name = 'users/templates/my_events.html'
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect ('feed')
+        return super().dispatch(request, *args, **kwargs)
     
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-class Feed(LoginRequiredMixin, ListView):
-    model = userProfiles
-    def get_queryset(self):
-        return Post.objects.all()
-    
-    def like_count (self):
-        likes = Like.objects.count()
-        return likes
-    
-    template_name = 'users/templates/feed.html'
