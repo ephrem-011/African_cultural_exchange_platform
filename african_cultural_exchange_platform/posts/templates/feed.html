@@ -15,7 +15,7 @@
         <h1><ul><a href="{% url 'viewpost' pk=post.pk %}">{{post.Title}}</a></ul></h1>
         <ul><img src="{{post.image.url}}" alt="{{post.Title}}"> </ul>
         <ul>
-            <a href="{% url 'like' pk=post.pk%}">Like</a> 
+            <a href="{% url 'like' pk=post.pk%}">Like</a>
             <a href="{% url 'comment' pk=post.pk%}">Comment</a>
         </ul>
         {%endfor%}

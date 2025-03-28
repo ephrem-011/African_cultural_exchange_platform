@@ -1,0 +1,10 @@
+<html>
+    <body>
+            <form method="post">
+                {%csrf_token%}
+                {{form.as_p}}
+                <button type="submit">Finish</button>
+            </form>
+            <a href="{% url 'logout' %}">Log out</a>
+    </body>
+</html>

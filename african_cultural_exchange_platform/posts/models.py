@@ -13,6 +13,7 @@ class Like(models.Model):
     user_id = models.ForeignKey(userProfiles, on_delete=models.CASCADE)
     post_id = models.ForeignKey (Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user_id', 'post_id'], name='unique_like')
@@ -22,5 +23,8 @@ class Comment(models.Model):
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
+
+    def get_post_id(self):
+        return self.post_id
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user_id', 'post_id', 'created_at'], name = 'unique_comment')]

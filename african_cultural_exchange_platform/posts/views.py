@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.generic import *
 from posts.models import *
 from users.models import *
 from django.contrib.auth.mixins import *
 from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError
 
 class AddPost(LoginRequiredMixin, CreateView):
     model = Post
@@ -34,24 +35,44 @@ class UpdatePost(UpdateView):
 
 class LikeView(View):
     def dispatch(self, request, *args, **kwargs):
-        Like.objects.create(user_id = self.request.user, post_id = Post.get.object(id = self.kwargs['pk']))
-        return redirect ('feed')
-    
+        try:
+            Like.objects.create(user_id = self.request.user, post_id = Post.objects.get(id = self.kwargs['pk']))
+        except IntegrityError:
+            Like.objects.filter(user_id = self.request.user, post_id = Post.objects.get(id = self.kwargs['pk'])).delete()
+        finally:
+            return redirect ('feed')
+    count = Like.objects.count()
 class CommentView(LoginRequiredMixin, CreateView, ListView):
     model = Comment
     fields = ['text']
     template_name = 'posts/templates/comment.html'
     def get_queryset(self):
-        return Comment.objects.all()
+        return Comment.objects.filter(post_id = Post.objects.get(pk = self.kwargs['pk']))
     def form_valid(self, form):
         form.instance.user_id = self.request.user
         form.instance.post_id = Post.objects.get(id=self.kwargs['pk'])
         return super().form_valid(form)
     def get_success_url(self):
-        return reverse('feed')
+        return reverse('comment', kwargs = {'pk': self.kwargs['pk']})
+class EditComment(UpdateView):
+    model = Comment
+    fields = ['text']
+    template_name = 'posts/templates/edit_comment.html'
 
+    def get_success_url(self):
+        current_comment = Comment.objects.get(id = self.kwargs['pk'])
+        return reverse('comment', kwargs = {'pk': current_comment.get_post_id().pk}) 
+
+def DeleteComment(request, PrimaryKey):
+    current_comment = get_object_or_404(Comment, id = PrimaryKey)
+    my_pk = current_comment.get_post_id().pk
+    current_comment.delete()
+    return redirect ('comment', my_pk )
 class Feed(LoginRequiredMixin, ListView):
     model = Post
+    like_count = LikeView.count
+    def get_queryset(self):
+        return super().get_queryset()
     template_name = 'posts/templates/feed.html'
 
     
