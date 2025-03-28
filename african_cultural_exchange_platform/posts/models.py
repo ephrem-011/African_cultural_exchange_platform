@@ -7,6 +7,9 @@ class Post(models.Model):
     image = models.ImageField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def get_number_of_likes(self):
+        return Like.objects.filter(post_id = self.id).count()
+
     def __str__(self):
         return self.Title
 class Like(models.Model):

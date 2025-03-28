@@ -13,6 +13,7 @@
         <ul></ul>
         <h1><ul><a href="{% url 'viewpost' pk=post.pk %}">{{post.Title}}</a></ul></h1>
         <ul><img src="{{post.image.url}}" alt="{{post.Title}}"> </ul>
+        <ul><a href="{% url 'delete_post' postPK=post.pk %}">Delete post</a></ul>
         {%endfor%}
     </body>
 </html>

@@ -47,7 +47,7 @@ class dashboard(LoginRequiredMixin, DetailView):
         if urlPK != self.request.user.pk:
             raise PermissionDenied("You're not authorized to access another user's dashboard.") 
         
-        context['myposts'] = Post.objects.filter(user_id = self.request.user.pk)
+        context['myposts'] = Post.objects.filter(user_id = self.request.user.pk).order_by('-created_at')
         return context
 
     model = userProfiles
@@ -65,5 +65,10 @@ class CustomLoginView(LoginView):
     
 def logout_view(request):
     logout(request)
+    return redirect('login')
+
+def DeleteUser(request, userPK):
+    object = userProfiles.objects.filter(id = userPK)
+    object.delete()
     return redirect('login')
 

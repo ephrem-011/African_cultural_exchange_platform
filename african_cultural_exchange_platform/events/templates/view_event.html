@@ -5,5 +5,8 @@
         <p>{{object.description}}</p>
         <p>Location: {{object.location}}</p>
         <p>At: {{object.date_time}}</p>
+        <a href="{% url 'joinevent' pk=object.pk%}">Join event</a>
+        <ul></ul>
+        <a href="{% url 'leave_event' event=object.pk%}">Leave event</a>
     </body>
 </html>

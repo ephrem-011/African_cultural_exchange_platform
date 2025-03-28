@@ -1,0 +1,8 @@
+<html>
+    <head><h1>Attendees</h1></head>
+    <body>
+        {%for attendee in object_list%}
+        <p>{{attendee.user_id.email}}</p>
+        {%endfor%}
+    </body>
+</html>

@@ -15,15 +15,15 @@ class CreateEvent(LoginRequiredMixin, CreateView):
     
     template_name = 'events/templates/create_event.html'
 
-class JoinEvent(LoginRequiredMixin, CreateView):
-    model = attendee
-    fields = []
-    template_name = 'events/templates/joinevent.html'    
-    def form_valid(self, form):
-        form.instance.user_id = self.request.user
-        form.instance.event_id = event.objects.get(id=self.kwargs['pk'])
-        form.save() 
+class JoinEvent(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        attendee.objects.create(user_id = request.user, event_id = event.objects.get(pk = self.kwargs['pk']))
         return redirect ('eventlist')
+def LeaveEvent(request, event):
+    object = attendee.objects.filter(user_id = request.user.id, event_id = event)
+    object.delete()
+    return redirect('eventlist')
+    
 class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = event
     fields = ['title','description','location', 'date_time']
@@ -50,3 +50,14 @@ class EventList (ListView):
     def get_queryset(self):
         return event.objects.all()
     template_name = 'events/templates/event_list.html'
+
+class ViewAttendees(ListView):
+    model = attendee
+    def get_queryset(self):
+        return attendee.objects.filter(event_id = event.objects.get(pk = self.kwargs['pk']))
+    template_name = 'events/templates/view_attendees.html'
+
+def DeleteEvent(request, eventPK):
+    obj = event.objects.filter(id = eventPK)
+    obj.delete()
+    return redirect ('myevents', request.user.id)

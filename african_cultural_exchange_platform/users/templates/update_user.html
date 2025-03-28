@@ -7,5 +7,6 @@
                 <button type="submit">Finish</button>
             </form>
             <a href="{% url 'logout' %}">Log out</a>
+            <a href="{% url 'delete_user' userPK=request.user.id %}">Delete my account</a>
     </body>
 </html>

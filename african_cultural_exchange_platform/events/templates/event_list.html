@@ -1,10 +1,10 @@
 <html>
-    <head><h1>Your events</h1></head>
+    <head><h1>Available events</h1></head>
     <body>
         {% for event in object_list %}
         <ul>
             <a href="{% url 'view_event' pk=event.pk%}">{{event.title}}</a>
-            <a href="{% url 'joinevent' pk=event.pk%}">Join event</a>
+            on {{event.date_time}} by {{event.creator.FirstName}}
         </ul>
         {%endfor%}
     </body>

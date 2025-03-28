@@ -17,7 +17,10 @@ class AddPost(LoginRequiredMixin, CreateView):
     
     def get_success_url(self):
         return reverse('dashboard', kwargs = {'pk':self.request.user.id})
-
+def DeletePost (request, postPK):
+    object = Post.objects.filter(id = postPK)
+    object.delete()
+    return redirect ('dashboard', request.user.id)
 class ViewPost(DetailView):
     model = Post
     def get_context_data(self, **kwargs):
@@ -27,7 +30,7 @@ class ViewPost(DetailView):
         return context
     template_name = 'posts/templates/post_detail.html'
 
-class UpdatePost(UpdateView):
+class UpdatePost(LoginRequiredMixin, UpdateView):
     model = Post
     fields = '__all__'
     success_url = '/admin'
@@ -41,7 +44,6 @@ class LikeView(View):
             Like.objects.filter(user_id = self.request.user, post_id = Post.objects.get(id = self.kwargs['pk'])).delete()
         finally:
             return redirect ('feed')
-    count = Like.objects.count()
 class CommentView(LoginRequiredMixin, CreateView, ListView):
     model = Comment
     fields = ['text']
@@ -69,10 +71,8 @@ def DeleteComment(request, PrimaryKey):
     current_comment.delete()
     return redirect ('comment', my_pk )
 class Feed(LoginRequiredMixin, ListView):
-    model = Post
-    like_count = LikeView.count
     def get_queryset(self):
-        return super().get_queryset()
+        return Post.objects.all().order_by('-created_at')
     template_name = 'posts/templates/feed.html'
 
     
