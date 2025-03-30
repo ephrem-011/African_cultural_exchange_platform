@@ -5,7 +5,11 @@ from users.models import *
 from django.contrib.auth.mixins import *
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
-
+from .serializers import *
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from .permissions import IsAuthorOrReadOnly
 class AddPost(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['Title', 'content', 'image']
@@ -74,5 +78,56 @@ class Feed(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Post.objects.all().order_by('-created_at')
     template_name = 'posts/templates/feed.html'
+
+class CreatePost(generics.CreateAPIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user_id = self.request.user)
+class RetrieveUpdateDestroyPost(generics.RetrieveUpdateDestroyAPIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthorOrReadOnly]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+class UpdateDeleteComment(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+class ListCreateComment(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer   
+    def get_queryset(self):
+        current_post = Post.objects.get(pk = self.kwargs['pk'])
+        query_set = Comment.objects.filter(post_id = current_post )
+        return query_set
+    def perform_create(self, serializer):
+        current_post = Post.objects.get(pk = self.kwargs['pk'])
+        serializer.save(user_id = self.request.user, post_id = current_post)
+class LikePost(generics.CreateAPIView):
+    serializer_class = LikeSerializer
+    queryset = Like.objects.all()
+    def perform_create(self, serializer):
+         current_post = Post.objects.get(id = self.kwargs['pk'])
+         serializer.save(user_id = self.request.user, post_id = current_post)
+class FeedAPI(generics.ListAPIView):
+    serializer_class = FeedSerializer
+    queryset = Post.objects.all().order_by('-created_at')
+class DeleteLike(generics.DestroyAPIView):
+    serializer_class = LikeSerializer
+    queryset = Like.objects.all()
+class EditPost(generics.UpdateAPIView):
+    serializer_class = PostSerializer
+    def get_queryset(self):
+        return Post.objects.filter(id = self.kwargs['pk'])
+    def perform_update(self, serializer):
+        serializer.save (user_id = self.request.user)
+class ViewLikes(generics.ListAPIView):
+    serializer_class = LikeSerializer
+    def get_queryset(self):
+        return Like.objects.filter(post_id = self.kwargs['pk'])
+class com(generics.ListAPIView):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
 
     

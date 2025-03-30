@@ -14,7 +14,7 @@ class Post(models.Model):
         return self.Title
 class Like(models.Model):
     user_id = models.ForeignKey(userProfiles, on_delete=models.CASCADE)
-    post_id = models.ForeignKey (Post, on_delete=models.CASCADE)
+    post_id = models.ForeignKey (Post, on_delete=models.CASCADE, related_name='likes')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -23,7 +23,7 @@ class Like(models.Model):
         ]
 class Comment(models.Model):
     user_id = models.ForeignKey(userProfiles, on_delete=models.CASCADE)
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     created_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
 
