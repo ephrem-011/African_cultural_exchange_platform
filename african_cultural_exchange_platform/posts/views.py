@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import *
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from .serializers import *
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .permissions import IsAuthorOrReadOnly
@@ -108,8 +108,11 @@ class LikePost(generics.CreateAPIView):
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
     def perform_create(self, serializer):
-         current_post = Post.objects.get(id = self.kwargs['pk'])
-         serializer.save(user_id = self.request.user, post_id = current_post)
+        current_post = Post.objects.get(id = self.kwargs['pk'])
+        try:
+            serializer.save(user_id = self.request.user, post_id = current_post)
+        except IntegrityError:
+            Like.objects.get(user_id = self.request.user, post_id = current_post).delete()
 class FeedAPI(generics.ListAPIView):
     serializer_class = FeedSerializer
     queryset = Post.objects.all().order_by('-created_at')
@@ -126,8 +129,5 @@ class ViewLikes(generics.ListAPIView):
     serializer_class = LikeSerializer
     def get_queryset(self):
         return Like.objects.filter(post_id = self.kwargs['pk'])
-class com(generics.ListAPIView):
-    serializer_class = CommentSerializer
-    queryset = Comment.objects.all()
 
     

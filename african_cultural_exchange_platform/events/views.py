@@ -3,6 +3,10 @@ from django.views.generic import *
 from events.models import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from rest_framework import generics
+from .serializers import *
+from .permissions import IsAuthorOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 class CreateEvent(LoginRequiredMixin, CreateView):
     model = event
@@ -61,3 +65,27 @@ def DeleteEvent(request, eventPK):
     obj = event.objects.filter(id = eventPK)
     obj.delete()
     return redirect ('myevents', request.user.id)
+
+class NewEvent(generics.CreateAPIView):
+    serializer_class = EventDetailSerializer
+    def perform_create(self, serializer):
+        serializer.save(creator = self.request.user)
+
+class ListEvent(generics.ListAPIView):
+    serializer_class = EventListSerializer
+    queryset = event.objects.all()
+class ViewEvent_(generics.RetrieveAPIView):
+    serializer_class = EventDetailSerializer
+    def get_queryset(self):
+        return event.objects.filter(id = self.kwargs['pk'])
+class EditEvent(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthorOrReadOnly, IsAuthenticated]
+    serializer_class = EventDetailSerializer
+    queryset = event.objects.all()
+    def perform_update(self, serializer):
+        serializer.save(creator = self.request.user)
+class JoinEvent_(generics.CreateAPIView):
+    serializer_class = attendeeSerializer
+    def perform_create(self, serializer):
+        current_event = event.objects.get(id = self.kwargs['pk'])
+        serializer.save(user_id = self.request.user, event_id = current_event)

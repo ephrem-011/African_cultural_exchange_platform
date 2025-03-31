@@ -18,6 +18,5 @@ urlpatterns = [
     path ('editcomment/<pk>', views.UpdateDeleteComment.as_view(), name='edicomment_'),
     path ('edit_post/<pk>', views.EditPost.as_view(), name='edit_post'),
     path ('deletelike/<pk>', views.DeleteLike.as_view(), name='deletelike'),
-    path ('com/', views.com.as_view(), name='com'),
     path ('likes/<pk>', views.ViewLikes.as_view(), name='likes'),
 ]
