@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from .serializers import *
 from rest_framework import generics, viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 from .permissions import IsAuthorOrReadOnly
 class AddPost(LoginRequiredMixin, CreateView):
@@ -80,22 +80,26 @@ class Feed(LoginRequiredMixin, ListView):
     template_name = 'posts/templates/feed.html'
 
 class CreatePost(generics.CreateAPIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
     def perform_create(self, serializer):
         serializer.save(user_id = self.request.user)
 class RetrieveUpdateDestroyPost(generics.RetrieveUpdateDestroyAPIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthorOrReadOnly]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 class UpdateDeleteComment(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
 class ListCreateComment(generics.ListCreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer   
     def get_queryset(self):
         current_post = Post.objects.get(pk = self.kwargs['pk'])
@@ -105,6 +109,8 @@ class ListCreateComment(generics.ListCreateAPIView):
         current_post = Post.objects.get(pk = self.kwargs['pk'])
         serializer.save(user_id = self.request.user, post_id = current_post)
 class LikePost(generics.CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
     def perform_create(self, serializer):
@@ -114,18 +120,25 @@ class LikePost(generics.CreateAPIView):
         except IntegrityError:
             Like.objects.get(user_id = self.request.user, post_id = current_post).delete()
 class FeedAPI(generics.ListAPIView):
+    permission_classes = [AllowAny]
     serializer_class = FeedSerializer
     queryset = Post.objects.all().order_by('-created_at')
 class DeleteLike(generics.DestroyAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
 class EditPost(generics.UpdateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     serializer_class = PostSerializer
     def get_queryset(self):
         return Post.objects.filter(id = self.kwargs['pk'])
     def perform_update(self, serializer):
         serializer.save (user_id = self.request.user)
 class ViewLikes(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = LikeSerializer
     def get_queryset(self):
         return Like.objects.filter(post_id = self.kwargs['pk'])

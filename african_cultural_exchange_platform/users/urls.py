@@ -10,6 +10,11 @@ urlpatterns = [
     path('login/', views.CustomLoginView.as_view(), name = 'login'),
     path('logout/', views.logout_view, name='logout'),
     path('delete_user/<int:userPK>', views.DeleteUser, name='delete_user'),
+    path('register/', views.SignupAPI.as_view(), name='register'),
+    path('deleteuser/<pk>', views.DeleteUser_.as_view(), name='deleteuser'),
+    path('login_/', views.Login.as_view(), name='login_'),
+    path('mydashboard/<pk>', views.MyDashboard.as_view(), name='mydashboard'),
+    path('edituser/<pk>', views.EditUser_.as_view(), name='edituser'),
     
 
 ]

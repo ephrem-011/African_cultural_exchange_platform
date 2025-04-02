@@ -2,7 +2,7 @@ from django.db import models
 from users.models import userProfiles
 
 class event(models.Model):
-    creator = models.ForeignKey(userProfiles, on_delete=models.CASCADE)
+    creator = models.ForeignKey(userProfiles, on_delete=models.CASCADE, related_name='myevents')
     title = models.CharField(max_length=350)
     description = models.TextField()
     location = models.CharField(max_length=200)

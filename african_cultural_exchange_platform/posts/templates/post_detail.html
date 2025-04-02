@@ -1,13 +1,12 @@
 <html>
-    <head><h1>{{object.Title}}</h1></head>
+    <head><h1>{{post.Title}}</h1></head>
     <body>
-        <p>{{object.content}}</p>
-        <img src="{{ object.image.url }}" alt="{{ object.Title }}">
-        <ul><a href="{% url 'like' pk=object.pk %}">Like</a></ul>
+        <p>{{post.content}}</p>
+        <img src="{{ post.image.url }}" alt="{{ post.Title }}" width="500" height="300">
+        <form method = "post">
+            <button type = "submint"><a href="{% url 'likepost' pk=post.pk %}">Like</a></button>
+        </form>
         <h2>Comments</h2>
-        {% for comment in comments %}
-        <li>{{comment.user_id.FirstName}} </li>
-        <ul>{{comment.text}}</ul>
-        {%endfor%}
+        <ul>{{post.comments}}</ul>
     </body>
 </html>

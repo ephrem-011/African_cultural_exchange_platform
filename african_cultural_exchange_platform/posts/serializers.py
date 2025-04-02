@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from posts.models import *
+import json
 
 class CommentSerializer(serializers.ModelSerializer):
     Commentator = serializers.CharField(source = 'user_id.FirstName', read_only = True)
@@ -20,6 +21,13 @@ class FeedSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['Title', 'image', 'created_at', 'likes']
 
+class DashboardSerializer(serializers.ModelSerializer):
+    likes = serializers.SerializerMethodField()
+    def get_likes(self, post):  
+        return Like.objects.filter(post_id=post).count()
+    class Meta:
+        model = Post
+        fields = ['Title', 'image','created_at', 'likes']
 class PostSerializer(serializers.ModelSerializer):
    
     comments = CommentSerializer(many = True, read_only = True)

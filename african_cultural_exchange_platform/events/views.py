@@ -70,7 +70,10 @@ class NewEvent(generics.CreateAPIView):
     serializer_class = EventDetailSerializer
     def perform_create(self, serializer):
         serializer.save(creator = self.request.user)
-
+class MyEvents_(generics.ListAPIView):
+    serializer_class = EventListSerializer
+    def get_queryset(self):
+        return event.objects.filter(creator = self.request.user)
 class ListEvent(generics.ListAPIView):
     serializer_class = EventListSerializer
     queryset = event.objects.all()
@@ -89,3 +92,14 @@ class JoinEvent_(generics.CreateAPIView):
     def perform_create(self, serializer):
         current_event = event.objects.get(id = self.kwargs['pk'])
         serializer.save(user_id = self.request.user, event_id = current_event)
+class LeaveEvent_(generics.DestroyAPIView):
+    serializer_class = attendeeSerializer
+    queryset = attendee.objects.all()
+    def get_object(self):
+        current_event = event.objects.get(id = self.kwargs['pk'])
+        return attendee.objects.get(user_id = self.request.user, event_id = current_event)
+class ViewAttendees(generics.ListAPIView):
+    serializer_class = attendeeSerializer
+    def get_queryset(self):
+        current_event = event.objects.get(id = self.kwargs['pk'])
+        return attendee.objects.filter(event_id = current_event)

@@ -2,7 +2,7 @@ from django.db import models
 from users.models import userProfiles
 class Post(models.Model):
     Title = models.CharField(max_length=300)
-    user_id = models.ForeignKey(userProfiles, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(userProfiles, on_delete=models.CASCADE, related_name='myposts')
     content = models.TextField()
     image = models.ImageField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
