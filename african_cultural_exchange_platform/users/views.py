@@ -18,7 +18,10 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsOwner
 from .serializers import *
-import json
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.authtoken.models import Token
 
 
 class HomeView(View):
@@ -120,3 +123,14 @@ class Login(ObtainAuthToken):
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key, 'user_id':user.id})
         return Response({'error': 'Invalid credentials'}, status=400)
+    
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            token = Token.objects.get(key=request.auth.key)
+            token.delete()
+            return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+        except Token.DoesNotExist:
+            return Response({"error": "Token not found."}, status=status.HTTP_400_BAD_REQUEST)

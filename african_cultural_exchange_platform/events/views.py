@@ -6,8 +6,11 @@ from django.contrib import messages
 from rest_framework import generics
 from .serializers import *
 from .permissions import IsOwner
+from django.db import IntegrityError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.exceptions import APIException
+from rest_framework.response import Response
 
 class CreateEvent(LoginRequiredMixin, CreateView):
     model = event
@@ -67,6 +70,11 @@ def DeleteEvent(request, eventPK):
     obj.delete()
     return redirect ('myevents', request.user.id)
 
+class EventCreatorError(APIException):
+    status_code = 400
+    default_detail = 'You cannot join your own event.'
+    default_code = 'event_creator_error'
+
 class NewEvent(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -100,14 +108,22 @@ class JoinEvent_(generics.CreateAPIView):
     serializer_class = attendeeSerializer
     def perform_create(self, serializer):
         current_event = event.objects.get(id = self.kwargs['pk'])
-        serializer.save(user_id = self.request.user, event_id = current_event)
+        if current_event.creator == self.request.user:
+            raise EventCreatorError()
+        try:
+            serializer.save(user_id = self.request.user, event_id = current_event)
+        except IntegrityError:
+            attendee.objects.get(user_id = self.request.user, event_id = current_event).delete()
+            return Response({"detail": "You left this event"})
+        else:
+            return Response({"detail": "Joined event successfully!"})
 class LeaveEvent_(generics.DestroyAPIView):
     serializer_class = attendeeSerializer
     queryset = attendee.objects.all()
     def get_object(self):
         current_event = event.objects.get(id = self.kwargs['pk'])
         return attendee.objects.get(user_id = self.request.user, event_id = current_event)
-class ViewAttendees(generics.ListAPIView):
+class ViewAttendees_(generics.ListAPIView):
     serializer_class = attendeeSerializer
     def get_queryset(self):
         current_event = event.objects.get(id = self.kwargs['pk'])

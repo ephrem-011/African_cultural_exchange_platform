@@ -48,8 +48,7 @@
             .then(data => {
                 // Pre-populate form fields with current data
                 console.log(data); // Log the entire data object
-                document.getElementById("email").value = data.email || '';
-                document.getElementById("password").value = data.password;
+                document.getElementById("email").value = data.email
                 document.getElementById("username").value = data.username;
                 document.getElementById("FirstName").value = data.FirstName;
                 document.getElementById("LastName").value = data.LastName;

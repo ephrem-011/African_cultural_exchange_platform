@@ -16,7 +16,7 @@ class attendeeSerializer(serializers.ModelSerializer):
     event_ = serializers.CharField(source = 'event_id.title', read_only = True)
     class Meta:
         model = attendee
-        exclude = ['id', 'user_id', 'event_id', 'joined_at']
+        exclude = ['id', 'user_id', 'event_id']
 class event_for_dashboard(serializers.ModelSerializer):
     class Meta:
         model = event

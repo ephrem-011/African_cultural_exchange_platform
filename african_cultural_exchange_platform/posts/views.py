@@ -5,6 +5,8 @@ from users.models import *
 from django.contrib.auth.mixins import *
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 from .serializers import *
 from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -79,8 +81,10 @@ class Feed(LoginRequiredMixin, ListView):
         return Post.objects.all().order_by('-created_at')
     template_name = 'posts/templates/feed.html'
 
+
 def frontend(request):
     return render(request, 'static/index.html')
+
 class CreatePost(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]

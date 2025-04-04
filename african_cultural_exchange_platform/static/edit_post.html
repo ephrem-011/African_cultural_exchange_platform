@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update post</title>
+</head>
+<body>
+    <h1>Update Your post</h1>
+
+    <form id="update-post-form">
+        <label for="title">Title:</label>
+        <input type="text" id="title" required><br><br>
+
+        <label for="content">Content:</label>
+        <textarea id="content" required></textarea><br><br>
+
+        <label for="post-image">Image:</label>
+        <input type="file" id="post-image" accept="image/*"><br><br>
+
+        <button type="submit">Update post</button>
+    </form>
+
+    <hr>
+    <button onclick="goBack()">Back to Dashboard</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = localStorage.getItem("token");
+            const params = new URLSearchParams(window.location.search);
+            const postId = params.get("id");
+
+            // Fetch user data for pre-population
+            fetch(`http://127.0.0.1:8000/post/${postId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Pre-populate form fields with current data
+                console.log(data); // Log the entire data object
+                document.getElementById("title").value = data.Title;
+                document.getElementById("content").value = data.content;
+            })
+            .catch(error => console.error("Error fetching post data:", error));
+        });
+
+        // Handle form submission for updating event
+        document.getElementById("update-post-form").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const token = localStorage.getItem("token");
+            const params = new URLSearchParams(window.location.search);
+            const postId = params.get("id");
+
+            const title = document.getElementById("title").value;
+            const content = document.getElementById("content").value;
+            const image = document.getElementById("post-image").files[0];
+
+            const formData = new FormData();
+            formData.append("Title", title);
+            formData.append("content", content);
+            if (image) formData.append("image", image);
+
+
+            // Make the API request to update the user profile
+            fetch(`http://127.0.0.1:8000/post/${postId}`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Token ${token}`
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Post updated successfully!");
+                window.location.href = "/static/dashboard.html"; // Redirect to dashboard after update
+            })
+            .catch(error => {
+                console.error("Error updating post:", error);
+                alert("Failed to update post.");
+            });
+        });
+    </script>
+</body>
+</html>
