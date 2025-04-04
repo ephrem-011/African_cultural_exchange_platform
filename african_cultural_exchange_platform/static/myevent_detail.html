@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Detail</title>
+</head>
+<body>
+    <h1>Event Details</h1>
+    <div id="event-detail"></div>
+    <button onclick="goBack()">Back to dashboard</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const eventId = params.get("id");
+
+            if (!eventId) {
+                document.getElementById("event-detail").innerHTML = "<p>Invalid event ID.</p>";
+                return;
+            }
+
+
+            fetch(`http://127.0.0.1:8000/viewevent/${eventId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(event => {
+                const eventDetailContainer = document.getElementById("event-detail");
+                eventDetailContainer.innerHTML = `
+                    <h2>${event.title}</h2>
+                    <p>${event.description}</p>
+                    <p>Location: ${event.location}</p>
+                    <p>Date & Time: ${event.date_time}</p>
+                    <a href="edit_event.html?id=${event.id}"><h5>Edit this event</h5></a>
+                `;
+            })
+            .catch(error => console.error("Error fetching event details:", error));
+        });
+
+        function goBack() {
+            window.location.href = "dashboard.html";
+        }
+        
+        function JoinEvent(Id) {
+            const token = localStorage.getItem("token");
+
+            fetch(`http://127.0.0.1:8000/joinevent_/${Id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => console.log("Joined event:", data))
+            .catch(error => console.error("Join error:", error));
+        }
+    </script>
+</body>
+</html>

@@ -76,7 +76,7 @@ class CustomLoginView(LoginView):
     
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('feed_')
 
 def DeleteUser(request, userPK):
     object = userProfiles.objects.filter(id = userPK)
@@ -87,21 +87,24 @@ class SignupAPI(generics.CreateAPIView):
     serializer_class = UserSerializer
     queryset = userProfiles.objects.all()
 class MyDashboard(generics.RetrieveAPIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsOwner]   
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsOwner]   
     serializer_class = MyDashboardSerializer
     def get_object(self):
         user = self.request.user
         user.sorted_posts = sorted(user.myposts.all(), key=lambda post: post.created_at, reverse=True)
-        user.sorted_events = sorted(user.myevents.all(), key=lambda event:event.created_at, reverse=True)
+        user.sorted_events = sorted(user.myevents.all(), key=lambda event: event.created_at, reverse=True)
         return user
     def get_queryset(self):
         return super().get_queryset()
-class EditUser_(generics.UpdateAPIView):
+class EditUser_(generics.RetrieveUpdateAPIView):
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsOwner]
     serializer_class = UserSerializer
     queryset = userProfiles.objects.all()
 class DeleteUser_(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    authentication_classes = [TokenAuthentication]
     serializer_class = UserSerializer
     queryset = userProfiles.objects.all()
 
@@ -115,5 +118,5 @@ class Login(ObtainAuthToken):
         user = authenticate(email=email, password=password)
         if user:
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
+            return Response({'token': token.key, 'user_id':user.id})
         return Response({'error': 'Invalid credentials'}, status=400)

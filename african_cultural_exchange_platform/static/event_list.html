@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event List</title>
+</head>
+<body>
+    <h1>Choose events to attend to:</h1>
+  
+    <hr>
+
+    <h2>Events</h2>
+    <div id="events"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://127.0.0.1:8000/event/")
+                .then(response => response.json())
+                .then(events => {
+                    const eventContainer = document.getElementById("events");
+                    eventContainer.innerHTML = "";
+
+                    events.forEach(event => {
+                        const eventElement = document.createElement("div");
+                        eventElement.innerHTML = `
+                        <ul> 
+                            <a href="event_detail.html?id=${event.id}"><h4>${event.title} on ${event.date_time} by ${event.creator_name}</h4></a>
+                        </ul>
+                        `;
+                        eventContainer.appendChild(eventElement);
+                    });
+                })
+                .catch(error => console.error("Error fetching events:", error));
+        });
+
+    </script>
+</body>
+</html>

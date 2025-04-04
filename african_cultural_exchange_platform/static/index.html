@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>African Cultural exchange platform</title>
+</head>
+<body>
+    <h1>Welcome to African Cultural exchange platform</h1>
+    
+    <!-- Authentication Links -->
+    <button onclick="showLogin()">Login</button>
+    <button onclick="showSignup()">Sign Up</button>
+    <button onclick="goToDashboard()">My dashboard</button>
+    <button onclick="goToCreatePostPage()">Create New Post</button>
+    <button onclick="goToCreateEventPage()">Create New event</button>
+    <button onclick="goToEventListPage()">Available Events</button>
+    <button onclick="logout()">Log out</button>
+    
+    <div id="signup-container" style="display: none;">
+        <h2 id="signup-title"></h2>
+        <input type="email" id="signup-email" placeholder="Email">
+        <input type="text" id="signup-username" placeholder="User name">
+        <input type="password" id="signup-password" placeholder="Password">
+        <input type="text" id="signup-FirstName" placeholder="First Name">
+        <input type="text" id="signup-LastName" placeholder="Last Name">
+        <button id="signup-submit"></button>
+        <div id="signup-message" style="color: green;"></div>
+    </div>
+    
+    <div id="auth-container" style="display: none;">
+        <h2 id="auth-title"></h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button id="auth-submit"></button>
+    </div>
+
+    <hr>
+
+    <!-- Feed Container -->
+    <h2>Feed</h2>
+    <div id="feed"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://127.0.0.1:8000/feed_/")
+                .then(response => response.json())
+                .then(posts => {
+                    const feedContainer = document.getElementById("feed");
+                    feedContainer.innerHTML = "";
+
+                    posts.forEach(post => {
+                        const postElement = document.createElement("div");
+                        postElement.innerHTML = `
+                            <a href="/static/post_detail.html?id=${post.id}"><h3>${post.Title}</h3></a>
+                            <img src="${post.image}" alt="Post Image" width="200">
+                            <p>Likes: ${post.likes} ${post.created_at}</p>
+                            <button onclick="likePost(${post.id})">Like</button>
+                        `;
+                        feedContainer.appendChild(postElement);
+                    });
+                })
+                .catch(error => console.error("Error fetching posts:", error));
+        });
+
+        function showLogin() {
+            document.getElementById("auth-container").style.display = "block";
+            document.getElementById("auth-title").innerText = "Login";
+            document.getElementById("auth-submit").innerText = "Login";
+            document.getElementById("auth-submit").onclick = login;
+        }
+
+        function showSignup() {
+            document.getElementById("signup-container").style.display = "block";
+            document.getElementById("signup-title").innerText = "Sign Up";
+            document.getElementById("signup-submit").innerText = "Register";
+            document.getElementById("signup-submit").onclick = signup;
+        }
+
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            fetch("http://127.0.0.1:8000/login_/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email:email, password:password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Login Success:", data);
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userID", data.user_id);
+            })
+            .catch(error => console.error("Login Error:", error));
+        }
+
+        function goToCreatePostPage() {
+            window.location.href = "/static/create_post.html";
+        }
+
+        function goToCreateEventPage(){
+            window.location.href = "/static/create_event.html";
+        }
+
+        function goToEventListPage(){
+            window.location.href = "/static/event_list.html"
+        }
+
+        function goToDashboard(){
+            window.location.href = "/static/dashboard.html"
+        }
+
+        function signup() {
+        const email = document.getElementById("signup-email").value;
+        const username = document.getElementById("signup-username").value;
+        const password = document.getElementById("signup-password").value;
+        const firstName = document.getElementById("signup-FirstName").value;
+        const lastName = document.getElementById("signup-LastName").value;
+
+        fetch("http://127.0.0.1:8000/register/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email:email, username:username, password:password, FirstName:firstName, LastName:lastName
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("signup-message").innerText = data.message || "Signup successful!";
+        })
+        .catch(error => console.error("Signup error:", error));
+        }
+
+        function likePost(postId) {
+            const token = localStorage.getItem("token");
+
+            fetch(`http://127.0.0.1:8000/likee/${postId}/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.reload(); // Reload the page
+            })
+            .catch(error => console.error("Like Error:", error));
+        }
+        function logout(){
+            fetch("http://127.0.0.1:8000/logout/")
+            method = "DELETE"
+        }
+    </script>
+</body>
+</html>

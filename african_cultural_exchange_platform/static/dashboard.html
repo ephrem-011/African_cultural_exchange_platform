@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Your Dashboard</h1>
+
+    <!-- Links for creating new posts and events -->
+    <button onclick="goToCreatePostPage()">Create New Post</button>
+    <button onclick="goToCreateEventPage()">Create New Event</button>
+    <button onclick="goToUpdateUserPage()">Update My Profile</button>
+    <button onclick="logout()">Log out</button>
+
+    <hr>
+
+    <h2>Your Profile</h2>
+    <div id="profile-info">
+        <p><strong>Username:</strong> <span id="username"></span></p>
+        <p><strong>Full Name:</strong> <span id="full-name"></span></p>
+    </div>
+
+    <h2>Your Posts</h2>
+    <div id="myposts">
+        <!-- Posts will be displayed here -->
+    </div>
+
+    <h2>Your Events</h2>
+    <div id="myevents">
+        <!-- Events will be displayed here -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = localStorage.getItem("token");
+            const userID = localStorage.getItem("userID");
+
+            // Fetch dashboard data
+            fetch(`http://127.0.0.1:8000/mydashboard/${userID}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display user profile information
+                document.getElementById("username").innerText = data.username;
+                document.getElementById("full-name").innerText = `${data.FirstName} ${data.LastName}`;
+
+                // Display user posts
+                const postsContainer = document.getElementById("myposts");
+                postsContainer.innerHTML = "";
+                if (data.myposts.length > 0) {
+                    data.myposts.forEach(post => {
+                        const postElement = document.createElement("div");
+                        postElement.innerHTML = `
+                            <h3>${post.Title}</h3>
+                            <img src="${post.image}" alt="Post Image" width="200">
+                            <p>Likes: ${post.likes}</p>
+                            <p>Created at: ${post.created_at.replace("Z", " ").slice(0,16)}</p>
+                        `;
+                        postsContainer.appendChild(postElement);
+                    });
+                } else {
+                    postsContainer.innerHTML = "<p>You don't have any posts yet.</p>";
+                }
+
+                // Display user events
+                const eventsContainer = document.getElementById("myevents");
+                eventsContainer.innerHTML = "";
+                if (data.myevents.length > 0) {
+                    data.myevents.forEach(event => {
+                        const eventElement = document.createElement("div");
+                        eventElement.innerHTML = `
+                            <a href="myevent_detail.html?id=${event.id}"><h3>${event.title}</h3></a>
+                            <p>Description: ${event.description}</p>
+                            <p>Location: ${event.location}</p>
+                            <p>Date & Time: ${event.date_time}</p>
+                        `;
+                        eventsContainer.appendChild(eventElement);
+                    });
+                } else {
+                    eventsContainer.innerHTML = "<p>You don't have any events yet.</p>";
+                }
+            })
+            .catch(error => console.error("Error fetching dashboard data:", error));
+        });
+
+        // Function to navigate to the "Create Post" page
+        function goToCreatePostPage() {
+            window.location.href = "/static/create_post.html";
+        }
+
+        // Function to navigate to the "Create Event" page
+        function goToCreateEventPage() {
+            window.location.href = "/static/create_event.html";
+        }
+
+        function goToUpdateUserPage() {
+            window.location.href = "/static/update_user.html";
+        }
+        // Function to log out
+        function logout() {
+            fetch("http://127.0.0.1:8000/logout/", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Token ${localStorage.getItem("token")}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Logout successful", data);
+                localStorage.removeItem("token");
+                localStorage.removeItem("userID");
+                window.location.href = "/static/index.html"; // Redirect to home page
+            })
+            .catch(error => console.error("Logout failed:", error));
+        }
+    </script>
+</body>
+</html>
+

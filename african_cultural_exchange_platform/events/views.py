@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from rest_framework import generics
 from .serializers import *
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsOwner
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 class CreateEvent(LoginRequiredMixin, CreateView):
     model = event
@@ -67,10 +68,15 @@ def DeleteEvent(request, eventPK):
     return redirect ('myevents', request.user.id)
 
 class NewEvent(generics.CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = EventDetailSerializer
+    queryset = event.objects.all()
     def perform_create(self, serializer):
         serializer.save(creator = self.request.user)
 class MyEvents_(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = EventListSerializer
     def get_queryset(self):
         return event.objects.filter(creator = self.request.user)
@@ -82,12 +88,15 @@ class ViewEvent_(generics.RetrieveAPIView):
     def get_queryset(self):
         return event.objects.filter(id = self.kwargs['pk'])
 class EditEvent(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthorOrReadOnly, IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsOwner, IsAuthenticated]
     serializer_class = EventDetailSerializer
     queryset = event.objects.all()
     def perform_update(self, serializer):
         serializer.save(creator = self.request.user)
 class JoinEvent_(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     serializer_class = attendeeSerializer
     def perform_create(self, serializer):
         current_event = event.objects.get(id = self.kwargs['pk'])

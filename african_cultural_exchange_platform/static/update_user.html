@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User Profile</title>
+</head>
+<body>
+    <h1>Update Your Profile</h1>
+
+    <form id="update-user-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br><br>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" required><br><br>
+
+        <label for="FirstName">First Name:</label>
+        <input type="text" id="FirstName" required><br><br>
+
+        <label for="LastName">Last Name:</label>
+        <input type="text" id="LastName" required><br><br>
+
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <hr>
+    <button onclick="goBack()">Back to Dashboard</button>
+    <button onclick="DeleteAccount()">Delete My account</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = localStorage.getItem("token");
+            const userID = localStorage.getItem("userID");
+
+            // Fetch user data for pre-population
+            fetch(`http://127.0.0.1:8000/edituser/${userID}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Pre-populate form fields with current data
+                console.log(data); // Log the entire data object
+                document.getElementById("email").value = data.email || '';
+                document.getElementById("password").value = data.password;
+                document.getElementById("username").value = data.username;
+                document.getElementById("FirstName").value = data.FirstName;
+                document.getElementById("LastName").value = data.LastName;
+            })
+            .catch(error => console.error("Error fetching user data:", error));
+        });
+
+        // Handle form submission for updating user profile
+        document.getElementById("update-user-form").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const token = localStorage.getItem("token");
+            const userID = localStorage.getItem("userID");
+
+            const username = document.getElementById("username").value;
+            const firstName = document.getElementById("FirstName").value;
+            const lastName = document.getElementById("LastName").value;
+            const email = document.getElementById("email").value;
+            const password =document.getElementById("password").value;
+
+            // Prepare data for the update request
+            const updatedData = {
+                email:email,
+                password:password,
+                username:username,
+                FirstName: firstName,
+                LastName: lastName
+            };
+
+            // Make the API request to update the user profile
+            fetch(`http://127.0.0.1:8000/edituser/${userID}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                },
+                body: JSON.stringify(updatedData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Profile updated successfully!");
+                window.location.href = "/static/dashboard.html"; // Redirect to dashboard after update
+            })
+            .catch(error => {
+                console.error("Error updating profile:", error);
+                alert("Failed to update profile.");
+            });
+        });
+        function DeleteAccount() {
+            const user_id = localStorage.getItem("userID")
+            const token = localStorage.getItem("token");
+
+            fetch(`http://127.0.0.1:8000/deleteuser/${user_id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Token ${token}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // No need to parse JSON because DELETE returns no content
+                    alert("User deleted successfully.");
+                    window.location.href = "index.html";
+                } else {
+                    return response.json().then(err => {
+                        throw new Error(err.detail || "Unknown error");
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Deletion Error:", error);
+                alert("Failed to delete user.");
+            });
+        }
+        // Function to go back to the dashboard
+        function goBack() {
+            window.location.href = "/static/dashboard.html";
+        }
+    </script>
+</body>
+</html>

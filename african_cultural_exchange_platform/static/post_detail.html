@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Detail</title>
+</head>
+<body>
+    <h1>Post Detail</h1>
+
+    <div id="post-detail"></div>
+
+    <hr>
+
+    <h2>Comments</h2>
+    <div id="comments-list"></div>
+
+    <!-- Add Comment Form -->
+    <textarea id="comment-content" placeholder="Write your comment..."></textarea><br><br>
+    <button onclick="submitComment()">Post Comment</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const token = localStorage.getItem("token");
+            const params = new URLSearchParams(window.location.search);
+            const postId = params.get("id"); // Get the post ID from the URL
+            const user_id = localStorage.getItem("userID")
+
+            if (!postId) {
+                alert("Post ID is missing in the URL.");
+                return;
+            }
+
+            // Fetch post details from API
+            fetch(`http://127.0.0.1:8000/post/${postId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(post => {
+                const postDetailContainer = document.getElementById("post-detail");
+
+                postDetailContainer.innerHTML = `
+                    <h2>${post.title}</h2>
+                    <p><strong>Content:</strong> ${post.content}</p>
+                    <p><strong>Likes:</strong> ${post.likes}</p>
+                    <p><strong>Created At:</strong> ${post.created_at}</p>
+                    <img src="${post.image}" alt="Post Image" width="300">
+                `;
+
+                // Display comments
+                const commentsList = document.getElementById("comments-list");
+                commentsList.innerHTML = ""; // Clear existing comments
+
+                post.comments.forEach(comment => {
+                    const commentElement = document.createElement("div");
+                    
+                    const editButton = comment.Commentator_id == user_id ? `
+                        <button onclick="editComment(${comment.id}, '${comment.text}')">Edit</button>
+                    ` : '';
+
+                    commentElement.innerHTML = `
+                        <p><strong>${comment.Commentator}:</strong> ${comment.text}</p>
+                        ${editButton}
+                        <div id="edit-container-${comment.id}" style="display:none;">
+                            <textarea id="edit-comment-text-${comment.id}">${comment.text}</textarea><br>
+                            <button onclick="submitEditedComment(${comment.id})">Save</button>
+                            <button onclick="cancelEdit(${comment.id})">Cancel</button>
+                        </div>
+                    `;
+                    commentsList.appendChild(commentElement);
+                });
+            })
+            .catch(error => console.error("Error fetching post details:", error));
+        });
+
+        // Function to submit a new comment
+        function submitComment() {
+            const token = localStorage.getItem("token");
+            const params = new URLSearchParams(window.location.search);
+            const postId = params.get("id");
+
+            const commentContent = document.getElementById("comment-content").value;
+            if (!commentContent) {
+                alert("Please enter a comment.");
+                return;
+            }
+
+            // Prepare comment data
+            const commentData = {
+                text: commentContent,
+            };
+
+            // Send POST request to create comment
+            fetch(`http://127.0.0.1:8000/createcomment/${postID}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                },
+                body: JSON.stringify(commentData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Comment added successfully!");
+                window.location.reload(); // Reload the page to display the new comment
+            })
+            .catch(error => {
+                console.error("Error adding comment:", error);
+                alert("Failed to add comment.");
+            });
+        }
+
+        // Function to enable comment editing
+        function editComment(commentId, currentContent) {
+            const editContainer = document.getElementById(`edit-container-${commentId}`);
+            const commentTextarea = document.getElementById(`edit-comment-text-${commentId}`);
+            const commentarea = document.getElementById("comment-content");
+
+            // Show textarea for editing
+            commentarea.style.display = 'none'
+            editContainer.style.display = 'block';
+            commentTextarea.value = currentContent; // Pre-populate the textarea with the existing content
+        }
+
+        // Function to save the edited comment
+        function submitEditedComment(commentId) {
+            const token = localStorage.getItem("token");
+            const commentContent = document.getElementById(`edit-comment-text-${commentId}`).value;
+
+            // Prepare data for updating the comment
+            const updatedData = {
+                text: commentContent
+            };
+
+            // Send PUT request to update the comment
+            fetch(`http://127.0.0.1:8000/editcomment/${commentId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`
+                },
+                body: JSON.stringify(updatedData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Comment updated successfully!");
+                window.location.reload(); // Reload the page to reflect the updated comment
+            })
+            .catch(error => {
+                console.error("Error updating comment:", error);
+                alert("Failed to update comment.");
+            });
+        }
+
+        // Function to cancel editing and hide the textarea
+        function cancelEdit(commentId) {
+            const editContainer = document.getElementById(`edit-container-${commentId}`);
+            editContainer.style.display = 'none'; // Hide the textarea and buttons
+        }
+    </script>
+</body>
+</html>

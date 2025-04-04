@@ -79,6 +79,8 @@ class Feed(LoginRequiredMixin, ListView):
         return Post.objects.all().order_by('-created_at')
     template_name = 'posts/templates/feed.html'
 
+def frontend(request):
+    return render(request, 'static/index.html')
 class CreatePost(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -97,7 +99,7 @@ class UpdateDeleteComment(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
-class ListCreateComment(generics.ListCreateAPIView):
+class CreateComment(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer   

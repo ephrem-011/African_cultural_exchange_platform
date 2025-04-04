@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-4!vcmwq%c-1n9bahw$9qf(#+)-sj1eqzyz*!^d%7b9#fga(qsn
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 LOGIN_URL = '/login/'
 # Application definition
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
     'users',
     'posts',
     'events',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,8 +58,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'african_cultural_exchange_platform.urls'
 
 TEMPLATES = [

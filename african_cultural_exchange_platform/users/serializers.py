@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = userProfiles
         fields = ['email', 'username','password', 'FirstName', 'LastName', 'isstaff', 'issuperuser']    
     def create(self, validated_data):
-        userProfiles.objects.create_user(**validated_data)
+        return userProfiles.objects.create_user(**validated_data)
     def update(self, instance, validated_data):
         pwd = validated_data.get('password')
         instance.set_password(pwd)
