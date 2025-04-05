@@ -66,7 +66,7 @@
                 document.getElementById("lg").style.display="none";
                 document.getElementById("db").style.display="none";
             }
-            fetch(`http://127.0.0.1:8000/feed_/?page=${page}`)
+            fetch(`https://ephrem007.pythonanywhere.com/feed_/?page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     const feedContainer = document.getElementById("feed");
@@ -133,7 +133,7 @@
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            fetch("http://127.0.0.1:8000/login_/", {
+            fetch("https://ephrem007.pythonanywhere.com/login_/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: email, password: password })
@@ -144,7 +144,7 @@
                     console.log("Login Success:", data);
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("userID", data.user_id);
-                    window.location.href = "/static/index.html"; 
+                    window.location.href = "https://ephrem007.pythonanywhere.com/static/index.html"; 
                 } else {
                     document.getElementById("auth-message").innerText = "Invalid credentials. Please try again.";
                 }
@@ -161,7 +161,7 @@
                 alert("Please log in first to create a post.");
                 return;
             } else {
-                window.location.href = "/static/create_post.html";
+                window.location.href = "https://ephrem007.pythonanywhere.com/static/create_post.html";
             }
         }
 
@@ -171,16 +171,16 @@
                 alert("Please log in first to create an event.");
                 return;
             } else{
-                window.location.href = "/static/create_event.html";
+                window.location.href = "https://ephrem007.pythonanywhere.com/static/create_event.html";
             }
         }
 
         function goToEventListPage(){
-            window.location.href = "/static/event_list.html"
+            window.location.href = "https://ephrem007.pythonanywhere.com/static/event_list.html"
         }
 
         function goToDashboard(){
-            window.location.href = "/static/dashboard.html"
+            window.location.href = "https://ephrem007.pythonanywhere.com/static/dashboard.html"
         }
 
         function goToPostDetail(postId) {
@@ -191,7 +191,7 @@
                 return;
             }
 
-            window.location.href = `/static/post_detail.html?id=${postId}`;
+            window.location.href = `https://ephrem007.pythonanywhere.com/static/post_detail.html?id=${postId}`;
         }
 
         function signup() {
@@ -201,7 +201,7 @@
     const firstName = document.getElementById("signup-FirstName").value;
     const lastName = document.getElementById("signup-LastName").value;
 
-    fetch("http://127.0.0.1:8000/register/", {
+    fetch("https://ephrem007.pythonanywhere.com/register/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -244,7 +244,7 @@ function likePost(postId) {
         return;
     }
 
-    fetch(`http://127.0.0.1:8000/likee/${postId}/`, {
+    fetch(`https://ephrem007.pythonanywhere.com/likee/${postId}/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -263,7 +263,7 @@ function likePost(postId) {
 }
 
         function logout(){
-            fetch("http://127.0.0.1:8000/logout/")
+            fetch("https://ephrem007.pythonanywhere.com/logout/")
             method = "DELETE"
         }
         function logout() {
@@ -271,11 +271,11 @@ function likePost(postId) {
             
             if (!token) {
                 console.log("No token found, already logged out.");
-                window.location.href = "/static/index.html";
+                window.location.href = "https://ephrem007.pythonanywhere.com/static/index.html";
                 return;
             }
 
-            fetch("http://127.0.0.1:8000/logout_/", {
+            fetch("https://ephrem007.pythonanywhere.com/logout_/", {
                 method: "POST",  
                 headers: {
                     "Content-Type": "application/json",
@@ -287,7 +287,7 @@ function likePost(postId) {
                 console.log(data.message);  
                 localStorage.removeItem("token"); 
                 alert("Logged out successfully.");
-                window.location.href = "/static/index.html";
+                window.location.href = "https://ephrem007.pythonanywhere.com/static/index.html";
             })
             .catch(error => {
                 console.error("Logout Error:", error);

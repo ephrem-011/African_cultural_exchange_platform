@@ -26,7 +26,7 @@
         });
 
         function loadEvents(page) {
-            fetch(`http://127.0.0.1:8000/event/?page=${page}`)
+            fetch(`https://ephrem007.pythonanywhere.com/event/?page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     const eventContainer = document.getElementById("events");
@@ -40,7 +40,7 @@
                         const eventElement = document.createElement("div");
                         eventElement.innerHTML = `
                             <ul> 
-                                <a href="event_detail.html?id=${event.id}">
+                                <a href="https://ephrem007.pythonanywhere.com/event_detail.html?id=${event.id}">
                                     <h4>${event.title} on ${event.date_time} by ${event.creator_name}</h4>
                                 </a>
                             </ul>
@@ -73,7 +73,7 @@
         }
 
         function goback(){
-            window.location.href = 'index.html';
+            window.location.href = 'https://ephrem007.pythonanywhere.com/index.html';
         }
     </script>
 </body>

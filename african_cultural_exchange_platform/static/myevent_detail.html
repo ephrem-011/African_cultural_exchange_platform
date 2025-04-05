@@ -29,7 +29,7 @@
             }
 
 
-            fetch(`http://127.0.0.1:8000/editevent/${eventId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/editevent/${eventId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -45,20 +45,20 @@
                     <p>${event.description}</p>
                     <p>Location: ${event.location}</p>
                     <p>Date & Time: ${event.date_time}</p>
-                    <a href="edit_event.html?id=${event.id}"><h5>Edit this event</h5></a>
+                    <a href="https://ephrem007.pythonanywhere.com/edit_event.html?id=${event.id}"><h5>Edit this event</h5></a>
                 `;
             })
             .catch(error => console.error("Error fetching event details:", error));
         });
 
         function goBack() {
-            window.location.href = "dashboard.html";
+            window.location.href = "https://ephrem007.pythonanywhere.com/dashboard.html";
         }
         
         function JoinEvent(Id) {
             const token = localStorage.getItem("token");
 
-            fetch(`http://127.0.0.1:8000/joinevent_/${Id}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/joinevent_/${Id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -74,7 +74,7 @@
         const eventId = params.get("id");
         const token = localStorage.getItem("token");
 
-        fetch(`http://127.0.0.1:8000/viewattendees/${eventId}`, {
+        fetch(`https://ephrem007.pythonanywhere.com/viewattendees/${eventId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

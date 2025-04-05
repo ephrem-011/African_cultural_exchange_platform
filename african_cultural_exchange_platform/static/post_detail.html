@@ -32,7 +32,7 @@
             }
 
             // Fetch post details from API
-            fetch(`http://127.0.0.1:8000/post/${postId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/post/${postId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -100,7 +100,7 @@
             };
 
             // Send POST request to create comment
-            fetch(`http://127.0.0.1:8000/comment_on/${postId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/comment_on/${postId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -142,7 +142,7 @@
             };
 
             // Send PUT request to update the comment
-            fetch(`http://127.0.0.1:8000/editcomment/${commentId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/editcomment/${commentId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -171,7 +171,7 @@
 
             if (confirm("Are you sure you want to delete this comment?")) {
                 // Send DELETE request to delete the comment
-                fetch(`http://127.0.0.1:8000/editcomment/${commentId}`, {
+                fetch(`https://ephrem007.pythonanywhere.com/editcomment/${commentId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",

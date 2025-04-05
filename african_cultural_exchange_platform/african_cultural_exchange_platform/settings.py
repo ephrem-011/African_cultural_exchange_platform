@@ -24,13 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4!vcmwq%c-1n9bahw$9qf(#+)-sj1eqzyz*!^d%7b9#fga(qsn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+ALLOWED_HOSTS = ['ephrem007.pythonanywhere.com']
+
 
 LOGIN_URL = '/login/'
 # Application definition
@@ -92,16 +89,15 @@ WSGI_APPLICATION = 'african_cultural_exchange_platform.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'african_cultural_exchange_platform',
-        'USER': 'root',
-        'PASSWORD':'1574321',
-        'HOST':'localhost',
+        'NAME': 'ephrem007$african_cultural_exchange_platform',
+        'USER': 'ephrem007',
+        'PASSWORD':'1584321ephrem',
+        'HOST':'ephrem007.mysql.pythonanywhere-services.com',
         'PORT':'3306',
     }
 }
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -136,9 +132,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
-STATIC_URL = 'static/'
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

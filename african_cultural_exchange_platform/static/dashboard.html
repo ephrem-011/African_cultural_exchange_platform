@@ -38,7 +38,7 @@
             const userID = localStorage.getItem("userID");
 
             // Fetch dashboard data
-            fetch(`http://127.0.0.1:8000/mydashboard/${userID}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/mydashboard/${userID}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -58,7 +58,7 @@
                     data.myposts.forEach(post => {
                         const postElement = document.createElement("div");
                         postElement.innerHTML = `
-                            <a href="mypost_detail.html?id=${post.id}"><h3>${post.Title}</h3></a>
+                            <a href="https://ephrem007.pythonanywhere.com/mypost_detail.html?id=${post.id}"><h3>${post.Title}</h3></a>
                             <img src="${post.image}" alt="Post Image" width="200">
                             <p>Likes: ${post.likes}</p>
                             <p>Created at: ${post.created_at.replace("Z", " ").slice(0,16)}</p>
@@ -76,7 +76,7 @@
                     data.myevents.forEach(event => {
                         const eventElement = document.createElement("div");
                         eventElement.innerHTML = `
-                            <a href="myevent_detail.html?id=${event.id}"><h3>${event.title}</h3></a>
+                            <a href="https://ephrem007.pythonanywhere.com/myevent_detail.html?id=${event.id}"><h3>${event.title}</h3></a>
                             <p>Description: ${event.description}</p>
                             <p>Location: ${event.location}</p>
                             <p>Date & Time: ${event.date_time}</p>
@@ -92,19 +92,19 @@
 
         // Function to navigate to the "Create Post" page
         function goToCreatePostPage() {
-            window.location.href = "/static/create_post.html";
+            window.location.href = "https://ephrem007.pythonanywhere.com/static/create_post.html";
         }
 
         // Function to navigate to the "Create Event" page
         function goToCreateEventPage() {
-            window.location.href = "/static/create_event.html";
+            window.location.href = "https://ephrem007.pythonanywhere.com/static/create_event.html";
         }
 
         function goToUpdateUserPage() {
-            window.location.href = "/static/update_user.html";
+            window.location.href = "https://ephrem007.pythonanywhere.com/static/update_user.html";
         }
         function goback(){
-            window.location.href = 'index.html'
+            window.location.href = 'https://ephrem007.pythonanywhere.com/index.html'
         }
     </script>
 </body>

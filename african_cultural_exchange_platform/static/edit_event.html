@@ -35,7 +35,7 @@
             const eventId = params.get("id");
 
             // Fetch user data for pre-population
-            fetch(`http://127.0.0.1:8000/editevent/${eventId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/editevent/${eventId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -76,7 +76,7 @@
             };
 
             // Make the API request to update the user profile
-            fetch(`http://127.0.0.1:8000/editevent/${eventId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/editevent/${eventId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -87,7 +87,7 @@
             .then(response => response.json())
             .then(data => {
                 alert("Event updated successfully!");
-                window.location.href = "/static/dashboard.html"; // Redirect to dashboard after update
+                window.location.href = "https://ephrem007.pythonanywhere.com/static/dashboard.html"; // Redirect to dashboard after update
             })
             .catch(error => {
                 console.error("Error updating event:", error);
@@ -99,7 +99,7 @@
             const params = new URLSearchParams(window.location.search);
             const eventId = params.get("id");
 
-            fetch(`http://127.0.0.1:8000/editevent/${eventId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/editevent/${eventId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Token ${token}`
@@ -108,7 +108,7 @@
             .then(response => {
                 if (response.ok) {
                     alert("Event deleted successfully!");
-                    window.location.href = "/static/dashboard.html"; // Redirect to dashboard after delete
+                    window.location.href = "https://ephrem007.pythonanywhere.com/static/dashboard.html"; // Redirect to dashboard after delete
                 } else {
                     return response.text().then(text => {
                         console.error("Delete failed:", text);

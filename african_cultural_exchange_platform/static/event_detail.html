@@ -23,7 +23,7 @@
             }
 
 
-            fetch(`http://127.0.0.1:8000/viewevent/${eventId}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/viewevent/${eventId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -45,13 +45,13 @@
         });
 
         function goBack() {
-            window.location.href = "event_list.html";
+            window.location.href = "https://ephrem007.pythonanywhere.com/event_list.html";
         }
 
         function JoinEvent(Id) {
             const token = localStorage.getItem("token");
 
-            fetch(`http://127.0.0.1:8000/joinevent_/${Id}`, {
+            fetch(`https://ephrem007.pythonanywhere.com/joinevent_/${Id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
