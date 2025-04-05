@@ -35,7 +35,7 @@
             const token = localStorage.getItem("token");
 
             // Make API request to create the post
-            fetch("https://ephrem007.pythonanywhere.com/addpost/", {
+            fetch("https://ephrem011.pythonanywhere.com/addpost/", {
                 method: "POST",
                 headers: {
                     "Authorization": `Token ${token}`
@@ -55,7 +55,7 @@
 
         // Function to go back to the feed
         function goBack() {
-            window.location.href = "https://ephrem007.pythonanywhere.com/static_root/index.html";
+            window.location.href = "https://ephrem011.pythonanywhere.com/index.html";
         }
     </script>
 </body>

@@ -29,7 +29,7 @@
             const datetime = document.getElementById("datetime").value;
             const token = localStorage.getItem("token");
 
-            fetch("https://ephrem007.pythonanywhere.com/newevent/", {
+            fetch("https://ephrem011.pythonanywhere.com/newevent/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -54,7 +54,7 @@
         });
 
         function goBack() {
-            window.location.href = "https://ephrem007.pythonanywhere.com/static_root/index.html";
+            window.location.href = "https://ephrem011.pythonanywhere.com/index.html";
         }
     </script>
 </body>
