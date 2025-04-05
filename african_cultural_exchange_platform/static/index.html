@@ -9,11 +9,16 @@
     <h1>Welcome to African Cultural exchange platform</h1>
     
     <!-- Authentication Links -->
-    <button onclick="goToCreatePostPage()">Create New Post</button>
-    <button onclick="goToCreateEventPage()">Create New event</button>
-    <button onclick="goToEventListPage()">Available Events</button>
-    <button onclick="showLogin()">Login</button>
-    <button onclick="showSignup()">Sign Up</button>
+     <div style="display: flex;">
+        <div id="db" style="display: none;"><button onclick="goToDashboard()">My dashboard</button></div>
+        <button onclick="goToCreatePostPage()">Create New Post</button>
+        <button onclick="goToCreateEventPage()">Create New event</button>
+        <button onclick="goToEventListPage()">Available Events</button>
+        <div id="show-login"><button onclick="showLogin()">Login</button></div>
+        <div id="show-signup"><button onclick="showSignup()">Sign Up</button></div>
+        <div id= "lg" style="display: none;"><button onclick="logout()">Log out</button></div>
+     </div>
+     
     
     <div id="signup-container" style="display: none;">
         <h2 id="signup-title"></h2>
@@ -41,17 +46,37 @@
     <div id="feed"></div>
 
     <script>
+        let currentPage = 1;
+
         document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://127.0.0.1:8000/feed_/")
+            loadFeed(currentPage);
+        });
+
+        function loadFeed(page) {
+            const token = localStorage.getItem("token")
+            if (token) {
+                document.getElementById("show-login").style.display="none";
+                document.getElementById("show-signup").style.display="none";
+                document.getElementById("lg").style.display="block";
+                document.getElementById("db").style.display="block";
+                
+            } else {
+                document.getElementById("show-login").style.display="block";
+                document.getElementById("show-signup").style.display="block";
+                document.getElementById("lg").style.display="none";
+                document.getElementById("db").style.display="none";
+            }
+            fetch(`http://127.0.0.1:8000/feed_/?page=${page}`)
                 .then(response => response.json())
-                .then(posts => {
+                .then(data => {
                     const feedContainer = document.getElementById("feed");
                     feedContainer.innerHTML = "";
 
-                    posts.forEach(post => {
+                    data.results.forEach(post => {
                         const postElement = document.createElement("div");
                         postElement.innerHTML = `
                             <h3 style="cursor: pointer; color: blue;" onclick="goToPostDetail(${post.id})">${post.Title}</h3>
+                            <h4 style="color: green;">By @${post.creator}</h4>
                             <img src="${post.image}" alt="Post Image" width="200">
                             <p>Likes: ${post.likes} ${post.created_at}</p>
                             <button onclick="likePost(${post.id})">Like</button>
@@ -59,9 +84,34 @@
 
                         feedContainer.appendChild(postElement);
                     });
+
+                    // Add pagination buttons
+                    const paginationControls = document.createElement("div");
+
+                    if (data.previous) {
+                        const prevBtn = document.createElement("button");
+                        prevBtn.innerText = "Previous";
+                        prevBtn.onclick = () => {
+                            currentPage -= 1;
+                            loadFeed(currentPage);
+                        };
+                        paginationControls.appendChild(prevBtn);
+                    }
+
+                    if (data.next) {
+                        const nextBtn = document.createElement("button");
+                        nextBtn.innerText = "Next";
+                        nextBtn.onclick = () => {
+                            currentPage += 1;
+                            loadFeed(currentPage);
+                        };
+                        paginationControls.appendChild(nextBtn);
+                    }
+
+                    feedContainer.appendChild(paginationControls);
                 })
                 .catch(error => console.error("Error fetching posts:", error));
-        });
+        }
 
         function showLogin() {
             document.getElementById("signup-container").style.display = "none"
@@ -92,9 +142,9 @@
             .then(data => {
                 if (data.token) {
                     console.log("Login Success:", data);
-                    localStorage.setItem("token", data.token); // Store token in localStorage
+                    localStorage.setItem("token", data.token);
                     localStorage.setItem("userID", data.user_id);
-                    window.location.href = "/static/logged_in_user_index.html"; // Redirect to dashboard after login
+                    window.location.href = "/static/index.html"; 
                 } else {
                     document.getElementById("auth-message").innerText = "Invalid credentials. Please try again.";
                 }
@@ -215,6 +265,34 @@ function likePost(postId) {
         function logout(){
             fetch("http://127.0.0.1:8000/logout/")
             method = "DELETE"
+        }
+        function logout() {
+            const token = localStorage.getItem("token");
+            
+            if (!token) {
+                console.log("No token found, already logged out.");
+                window.location.href = "/static/index.html";
+                return;
+            }
+
+            fetch("http://127.0.0.1:8000/logout_/", {
+                method: "POST",  
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${token}`  
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);  
+                localStorage.removeItem("token"); 
+                alert("Logged out successfully.");
+                window.location.href = "/static/index.html";
+            })
+            .catch(error => {
+                console.error("Logout Error:", error);
+                alert("Error logging out. Please try again.");
+            });
         }
     </script>
 </body>

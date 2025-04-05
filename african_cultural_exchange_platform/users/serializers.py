@@ -9,21 +9,24 @@ class UserSerializer(serializers.ModelSerializer):
         model = userProfiles
         fields = ['email', 'username','password', 'FirstName', 'LastName', 'isstaff', 'issuperuser'] 
     def validate_email(self, value):
-        if userProfiles.objects.filter(email=value).exists():
+        email_owner = userProfiles.objects.get(email = value)
+        if email_owner == self.instance:
+            return value
+        elif userProfiles.objects.filter(email=value).exists() and email_owner != self.instance:
             raise serializers.ValidationError("This email is already registered.")
-        return value
 
     def validate_username(self, value):
-        if userProfiles.objects.filter(username=value).exists():
+        username_owner = userProfiles.objects.get(username = value)
+        if username_owner == self.instance:
+            return value
+        elif userProfiles.objects.filter(username=value).exists() and username_owner != self.instance:
             raise serializers.ValidationError("This username is already taken.")
-        return value
     
     email = serializers.EmailField(
         required=True,
         error_messages={
             "required": "Email is required.",
             "blank": "Email cannot be blank.",
-            "unique": "Email already taken",
         }
     )
 
@@ -32,7 +35,6 @@ class UserSerializer(serializers.ModelSerializer):
         error_messages={
             "required": "User name is required.",
             "blank": "User name cannot be blank.",
-            "unique": "User name already taken",
         }
     )
 

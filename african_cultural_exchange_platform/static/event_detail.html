@@ -8,6 +8,8 @@
 <body>
     <h1>Event Details</h1>
     <div id="event-detail"></div>
+    <div id="message-container" style="color: green;"></div> 
+
     <button onclick="goBack()">Back to Events</button>
 
     <script>
@@ -54,25 +56,25 @@
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Token ${token}`
-                }
+                },
+                body: JSON.stringify({})  
             })
-            .then(response => response.json())
-            .then(data => {
-                // Check if the response contains a message in the 'detail' field
-                if (data.detail) {
-                    // Display the message in an alert box
-                    alert(data.detail);  // This will show messages like "You left this event" or "Joined event successfully!"
-
-                    // Optionally reload the page to reflect the changes after the join/leave action
-                    window.location.reload();
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(({ status, body }) => {
+                if (body.detail) {
+                    if(body.detail == "Invalid token."){
+                        alert("You have to login to join an event")
+                    } else{
+                        alert(body.detail);
+                    }
+                    
                 } else {
-                    // If there's no 'detail' field, handle any unexpected responses here
-                    console.error("Unexpected response:", data);
+                    alert("Something happened");
                 }
             })
             .catch(error => {
-                console.error("Join Event Error:", error);
-                alert("Something went wrong. Please try again.");
+                console.error("Join error:", error);
+                alert("An error occurred while joining the event.");
             });
         }
 

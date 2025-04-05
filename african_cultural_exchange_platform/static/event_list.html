@@ -6,42 +6,74 @@
     <title>Event List</title>
 </head>
 <body>
-    <h1>Choose events to attend to:</h1>
+    <h1>Choose events to attend:</h1>
   
     <hr>
 
     <h2>Events</h2>
     <div id="events"></div>
-    <button onclick="goback()">Back to feed</button>
     
+    <!-- Pagination Controls -->
+    <div id="pagination-controls"></div>
+    
+    <button onclick="goback()">Back to feed</button>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://127.0.0.1:8000/event/")
-                .then(response => response.json())
-                .then(events => {
-                    const eventContainer = document.getElementById("events");
-                    eventContainer.innerHTML = "";
+        let currentPage = 1;
 
-                    events.forEach(event => {
+        document.addEventListener("DOMContentLoaded", function () {
+            loadEvents(currentPage);
+        });
+
+        function loadEvents(page) {
+            fetch(`http://127.0.0.1:8000/event/?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    const eventContainer = document.getElementById("events");
+                    const paginationControls = document.getElementById("pagination-controls");
+
+                    eventContainer.innerHTML = "";
+                    paginationControls.innerHTML = "";
+
+                    // Display events
+                    data.results.forEach(event => {
                         const eventElement = document.createElement("div");
                         eventElement.innerHTML = `
-                        <ul> 
-                            <a href="event_detail.html?id=${event.id}"><h4>${event.title} on ${event.date_time} by ${event.creator_name}</h4></a>
-                        </ul>
+                            <ul> 
+                                <a href="event_detail.html?id=${event.id}">
+                                    <h4>${event.title} on ${event.date_time} by ${event.creator_name}</h4>
+                                </a>
+                            </ul>
                         `;
                         eventContainer.appendChild(eventElement);
                     });
+
+                    // Pagination controls
+                    if (data.previous) {
+                        const prevButton = document.createElement("button");
+                        prevButton.textContent = "Previous";
+                        prevButton.onclick = () => {
+                            currentPage--;
+                            loadEvents(currentPage);
+                        };
+                        paginationControls.appendChild(prevButton);
+                    }
+
+                    if (data.next) {
+                        const nextButton = document.createElement("button");
+                        nextButton.textContent = "Next";
+                        nextButton.onclick = () => {
+                            currentPage++;
+                            loadEvents(currentPage);
+                        };
+                        paginationControls.appendChild(nextButton);
+                    }
                 })
                 .catch(error => console.error("Error fetching events:", error));
-        });
+        }
+
         function goback(){
-            token = localStorage.getItem("token");
-            if(!token){
-                window.location.href = '/static/index.html';
-            } else {
-                window.location.href = '/static/logged_in_user_index.html';
-            }
+            window.location.href = 'index.html';
         }
     </script>
 </body>

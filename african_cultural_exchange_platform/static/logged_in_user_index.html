@@ -23,14 +23,20 @@
     <div id="feed"></div>
 
     <script>
+        let currentPage = 1;
+
         document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://127.0.0.1:8000/feed_/")
+            loadFeed(currentPage);
+        });
+
+        function loadFeed(page) {
+            fetch(`http://127.0.0.1:8000/feed_/?page=${page}`)
                 .then(response => response.json())
-                .then(posts => {
+                .then(data => {
                     const feedContainer = document.getElementById("feed");
                     feedContainer.innerHTML = "";
 
-                    posts.forEach(post => {
+                    data.results.forEach(post => {
                         const postElement = document.createElement("div");
                         postElement.innerHTML = `
                             <a href="/static/post_detail.html?id=${post.id}"><h3>${post.Title}</h3></a>
@@ -40,13 +46,35 @@
                         `;
                         feedContainer.appendChild(postElement);
                     });
+
+                    // Add pagination buttons
+                    const paginationControls = document.createElement("div");
+
+                    if (data.previous) {
+                        const prevBtn = document.createElement("button");
+                        prevBtn.innerText = "Previous";
+                        prevBtn.onclick = () => {
+                            currentPage -= 1;
+                            loadFeed(currentPage);
+                        };
+                        paginationControls.appendChild(prevBtn);
+                    }
+
+                    if (data.next) {
+                        const nextBtn = document.createElement("button");
+                        nextBtn.innerText = "Next";
+                        nextBtn.onclick = () => {
+                            currentPage += 1;
+                            loadFeed(currentPage);
+                        };
+                        paginationControls.appendChild(nextBtn);
+                    }
+
+                    feedContainer.appendChild(paginationControls);
                 })
                 .catch(error => console.error("Error fetching posts:", error));
-        });
+        }
 
-        
-
-        
 
         function goToCreatePostPage() {
             window.location.href = "/static/create_post.html";

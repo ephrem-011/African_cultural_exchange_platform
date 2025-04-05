@@ -16,11 +16,12 @@ class LikeSerializer(serializers.ModelSerializer):
 
 class FeedSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField()
+    creator = serializers.CharField(source='user_id.username', read_only = True)
     def get_likes(self, post):
         return Like.objects.filter(post_id=post).count()
     class Meta:
         model = Post
-        fields = ['id','Title', 'image', 'created_at', 'likes']
+        fields = ['id','creator','Title', 'image', 'created_at', 'likes']
 
 class DashboardSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField()
