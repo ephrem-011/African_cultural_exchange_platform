@@ -9,18 +9,24 @@ class UserSerializer(serializers.ModelSerializer):
         model = userProfiles
         fields = ['email', 'username','password', 'FirstName', 'LastName', 'isstaff', 'issuperuser'] 
     def validate_email(self, value):
-        email_owner = userProfiles.objects.get(email = value)
-        if email_owner == self.instance:
+        try:
+            email_owner = userProfiles.objects.get(email = value)
+        except 	userProfiles.DoesNotExist:
             return value
-        elif userProfiles.objects.filter(email=value).exists() and email_owner != self.instance:
-            raise serializers.ValidationError("This email is already registered.")
+        else:
+            if userProfiles.objects.filter(email=value).exists() and email_owner != self.instance:
+                raise serializers.ValidationError("This email is already registered.")
+            return value
 
     def validate_username(self, value):
-        username_owner = userProfiles.objects.get(username = value)
-        if username_owner == self.instance:
+        try:
+            username_owner = userProfiles.objects.get(username = value)
+        except userProfiles.DoesNotExist:
             return value
-        elif userProfiles.objects.filter(username=value).exists() and username_owner != self.instance:
-            raise serializers.ValidationError("This username is already taken.")
+        else:
+            if userProfiles.objects.filter(username=value).exists() and username_owner != self.instance:
+                raise serializers.ValidationError("This username is already taken.")
+            return value
     
     email = serializers.EmailField(
         required=True,
