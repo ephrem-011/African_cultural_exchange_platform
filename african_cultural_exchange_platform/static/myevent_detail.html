@@ -45,14 +45,14 @@
                     <p>${event.description}</p>
                     <p>Location: ${event.location}</p>
                     <p>Date & Time: ${event.date_time}</p>
-                    <a href="https://ephrem011.pythonanywhere.com/edit_event.html?id=${event.id}"><h5>Edit this event</h5></a>
+                    <a href="https://ephrem011.pythonanywhere.com/static/edit_event.html?id=${event.id}"><h5>Edit this event</h5></a>
                 `;
             })
             .catch(error => console.error("Error fetching event details:", error));
         });
 
         function goBack() {
-            window.location.href = "https://ephrem011.pythonanywhere.com/dashboard.html";
+            window.location.href = "https://ephrem011.pythonanywhere.com/static/dashboard.html";
         }
         
         function JoinEvent(Id) {
