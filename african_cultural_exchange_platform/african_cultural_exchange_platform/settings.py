@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-4!vcmwq%c-1n9bahw$9qf(#+)-sj1eqzyz*!^d%7b9#fga(qsn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ephrem007.pythonanywhere.com']
+ALLOWED_HOSTS = ['ephrem011.pythonanywhere.com']
 
 
 LOGIN_URL = '/login/'
@@ -89,10 +89,10 @@ WSGI_APPLICATION = 'african_cultural_exchange_platform.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ephrem007$african_cultural_exchange_platform',
-        'USER': 'ephrem007',
-        'PASSWORD':'1584321ephrem',
-        'HOST':'ephrem007.mysql.pythonanywhere-services.com',
+        'NAME': 'ephrem011$african_cultural_exchange_platform',
+        'USER': 'ephrem011',
+        'PASSWORD':'1584321efk',
+        'HOST':'ephrem011.mysql.pythonanywhere-services.com',
         'PORT':'3306',
     }
 }
