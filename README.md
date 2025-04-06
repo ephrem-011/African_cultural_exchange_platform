@@ -24,6 +24,7 @@ This platform allows users from different cultures or regions to share unique kn
 This project is aimed to grow in a great scale for the future by including features like chat, zoom events, following eachother, event recommendation according to who they follow and past attending patterns etc
 
 **Endpoints:**
+
   🧍 Users
   - Register
     
@@ -90,7 +91,7 @@ This project is aimed to grow in a great scale for the future by including featu
     
     GET /post/pk
 
-  - /Update/Delete
+  - Update & Delete a post
 
     PUT /edit_post/pk
 
