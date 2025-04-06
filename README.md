@@ -34,22 +34,23 @@ This project is aimed to grow in a great scale for the future by including featu
   
   
     {
-    
       "username": "string",
-    
       "email": "string",
-    
       "password": "string",
-    
       "FirstName": "string",
-    
       "LastName": "string"
-    
     }
 
 - Login
 
   POST /login_/
+
+  Request Body:
+
+  {
+    "email":"string",
+    "password":"string
+  }
 
   Returns auth token and user id
 
@@ -58,6 +59,7 @@ This project is aimed to grow in a great scale for the future by including featu
   GET /mydashboard/pk/
 
   PUT /edituser/pk/ (Update user info)
+
 
 
 
@@ -75,7 +77,13 @@ This project is aimed to grow in a great scale for the future by including featu
   
     POST /addpost/
 
-    Fields: Title, content, image
+    Request body:
+
+    {
+    "Title":"String",
+    "content":"String",
+    "image":"file"
+    }
 
 
   - Detail
@@ -88,8 +96,24 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
     DELETE /edit_post/pk
+    
+  - Like post
 
+    POST /likee/pk
+    
+  - comment on a post
 
+    POST /comment_on/pk
+
+    Request Body:
+
+    {
+    "text":"string"
+    }
+
+    Edit comment
+
+    PUT /edit_comment/pk
 
   📅 Events
   
@@ -113,7 +137,10 @@ This project is aimed to grow in a great scale for the future by including featu
   
     GET /viewevent/pk
 
+  - Join Event
 
+    POST /joinevent_/pk
+    
 
   🧾 Media
   
