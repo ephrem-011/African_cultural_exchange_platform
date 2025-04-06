@@ -54,8 +54,9 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
 
-- 📸 Posts
-  List Posts
+📸 Posts
+
+  - List Posts
 
     GET /feed_/
 
@@ -63,17 +64,17 @@ This project is aimed to grow in a great scale for the future by including featu
     Pagination supported (?page=1)
 
 
-  Create Post
+  - Create Post
   
-    POST /appposts/
+    POST /addpost/
 
     Fields: Title, content, image
 
 
-  Detail
+  - Detail
     GET /post<pk>
-    
-  /Update/Delete
+
+  - /Update/Delete
 
     PUT /edit_post/<id>/
 
@@ -82,9 +83,9 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
 
-- 📅 Events
+  📅 Events
   
-  List Events
+  - List Events
   
     GET /event/
 
@@ -92,7 +93,7 @@ This project is aimed to grow in a great scale for the future by including featu
     Pagination supported
 
 
-  Create Event
+  - Create Event
   
     POST /newevent/
 
@@ -100,20 +101,20 @@ This project is aimed to grow in a great scale for the future by including featu
     Fields: title, description, date_time, creator
 
 
-  Detail View
+  - Detail View
   
     GET /viewevent/<id>/
 
 
 
-- 🧾 Media
+  🧾 Media
   
-  Uploaded media files are accessible via:
+  - Uploaded media files are accessible via:
 
 
-  /media/<filename>
+  - /media/<filename>
   
-  Make sure media is properly configured on the server.
+    Make sure media is properly configured on the server.
   
 
 - Pagination
