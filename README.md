@@ -101,19 +101,18 @@ This project is aimed to grow in a great scale for the future by including featu
 
     POST /likee/pk
     
-  - comment on a post
+  - Create comment & Edit comment
 
     POST /comment_on/pk
+    
+    PUT /edit_comment/pk
 
     Request Body:
-
+    
     {
     "text":"string"
     }
 
-    Edit comment
-
-    PUT /edit_comment/pk
 
   📅 Events
   
@@ -136,6 +135,12 @@ This project is aimed to grow in a great scale for the future by including featu
   - Detail View
   
     GET /viewevent/pk
+
+  - Update/Delete Event
+
+    PUT /editevent/pk
+
+    DELETE /editevent/pk
 
   - Join Event
 
