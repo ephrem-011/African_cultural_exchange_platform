@@ -29,16 +29,16 @@ This project is aimed to grow in a great scale for the future by including featu
     POST /register/
 
 
-- Request Body:
-
-
-  {
-    "username": "string",
-    "email": "string",
-    "password": "string",
-    "FirstName": "string",
-    "LastName": "string"
-  }
+    Request Body:
+  
+  
+    {
+      "username": "string",
+      "email": "string",
+      "password": "string",
+      "FirstName": "string",
+      "LastName": "string"
+    }
 
 - Login
   POST /login_/
