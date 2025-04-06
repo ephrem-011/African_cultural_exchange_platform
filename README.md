@@ -26,6 +26,7 @@ This project is aimed to grow in a great scale for the future by including featu
 **Endpoints:**
   🧍 Users
   - Register
+    
     POST /register/
 
 
@@ -72,7 +73,7 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
   - Detail
-  - 
+    
     GET /post/pk
 
   - /Update/Delete
