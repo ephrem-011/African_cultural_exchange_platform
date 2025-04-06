@@ -34,11 +34,17 @@ This project is aimed to grow in a great scale for the future by including featu
   
   
     {
+    
       "username": "string",
+    
       "email": "string",
+    
       "password": "string",
+    
       "FirstName": "string",
+    
       "LastName": "string"
+    
     }
 
 - Login
