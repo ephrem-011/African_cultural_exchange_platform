@@ -48,9 +48,9 @@ This project is aimed to grow in a great scale for the future by including featu
 
 - Profile
 
-  GET /mydashboard<id>/
+  GET /mydashboard/pk/
 
-  PUT /edituser<id>/ (Update user info)
+  PUT /edituser/pk/ (Update user info)
 
 
 
@@ -72,14 +72,15 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
   - Detail
-    GET /post<pk>
+  - 
+    GET /post/pk
 
   - /Update/Delete
 
-    PUT /edit_post/<id>/
+    PUT /edit_post/pk
 
 
-    DELETE /edit_post/<id>/
+    DELETE /edit_post/pk
 
 
 
@@ -103,7 +104,7 @@ This project is aimed to grow in a great scale for the future by including featu
 
   - Detail View
   
-    GET /viewevent/<id>/
+    GET /viewevent/pk
 
 
 
