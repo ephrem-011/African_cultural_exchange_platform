@@ -63,6 +63,7 @@ class Login(ObtainAuthToken):
     
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def post(self, request):
         try:
