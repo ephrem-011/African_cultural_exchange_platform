@@ -16,23 +16,9 @@ This platform allows users from different cultures or regions to share unique kn
 - Commenting on posts
 
 **Events:**
-- Users can organize cultural events (e.g., cooking classes, cultural tours, language exchange meetings) and invite other users to participate.
+- Users can organize cultural events (e.g., cooking classes, cultural tours, language exchange meetings) and invite other users to participate, and users can schoose which events to attend to and also leave an event when desired.
 - Events could include details like time, location, and a description of the cultural activity.
-- Search and Filter posts or events
-- View their own posts/events and view posts/events of a specific user
+- View their own posts/events through dashboard
 
-
-**API Endpoints:**
-- Like a Post
-- Comment on a Post
-- View All Posts
-- View Events
-- View a Specific Post
-- View Posts by a Specific User
-- Search Posts
-- Models
-- User
-- Post
-- Like
-- Comment
-- Events
+**Future plan:**
+This project is aimed to grow in a great scale for the future by including features like chat, zoom events, following eachother, event recommendation according to who they follow and past attending patterns etc
