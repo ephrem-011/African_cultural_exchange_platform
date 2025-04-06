@@ -41,8 +41,8 @@ This project is aimed to grow in a great scale for the future by including featu
     }
 
 - Login
-  POST /login_/
 
+  POST /login_/
 
   Returns auth token and user id
 
@@ -50,12 +50,13 @@ This project is aimed to grow in a great scale for the future by including featu
 
   GET /mydashboard<id>/
 
-  PUT /edituser/<id>/ (Update user info)
+  PUT /edituser<id>/ (Update user info)
 
 
 
 - 📸 Posts
   List Posts
+
     GET /feed_/
 
 
@@ -63,15 +64,16 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
   Create Post
+  
     POST /appposts/
-
 
     Fields: Title, content, image
 
 
-  Detail/Update/Delete
-    GET /edit_post/<id>/
-
+  Detail
+    GET /post<pk>
+    
+  /Update/Delete
 
     PUT /edit_post/<id>/
 
@@ -81,7 +83,9 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
 - 📅 Events
+  
   List Events
+  
     GET /event/
 
 
@@ -89,6 +93,7 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
   Create Event
+  
     POST /newevent/
 
 
@@ -96,11 +101,13 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
   Detail View
+  
     GET /viewevent/<id>/
 
 
 
 - 🧾 Media
+  
   Uploaded media files are accessible via:
 
 
@@ -110,6 +117,7 @@ This project is aimed to grow in a great scale for the future by including featu
   
 
 - Pagination
+  
   All list endpoints use page number pagination.
   Example:
   
@@ -118,6 +126,7 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
 - Status Codes
+  
   200 OK – Success
   
   
@@ -135,6 +144,7 @@ This project is aimed to grow in a great scale for the future by including featu
 
 
 **Notes:**
+
   CORS is enabled for all origins in development.
   
   
