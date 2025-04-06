@@ -23,3 +23,128 @@ This platform allows users from different cultures or regions to share unique kn
 **Future plan:**
 This project is aimed to grow in a great scale for the future by including features like chat, zoom events, following eachother, event recommendation according to who they follow and past attending patterns etc
 
+**Endpoints:**
+  🧍 Users
+  - Register
+    POST /register/
+
+
+- Request Body:
+
+
+  {
+    "username": "string",
+    "email": "string",
+    "password": "string",
+    "FirstName": "string",
+    "LastName": "string"
+  }
+
+- Login
+  POST /login_/
+
+
+  Returns auth token and user id
+
+- Profile
+  GET /mydashboard/<id>/
+
+
+  PUT /edituser/<id>/ (Update user info)
+
+
+
+- 📸 Posts
+  List Posts
+    GET /feed_/
+
+
+    Pagination supported (?page=1)
+
+
+  Create Post
+    POST /appposts/
+
+
+    Fields: Title, content, image
+
+
+  Detail/Update/Delete
+    GET /edit_post/<id>/
+
+
+    PUT /edit_post/<id>/
+
+
+    DELETE /edit_post/<id>/
+
+
+
+- 📅 Events
+  List Events
+    GET /event/
+
+
+    Pagination supported
+
+
+  Create Event
+    POST /newevent/
+
+
+    Fields: title, description, date_time, creator
+
+
+  Detail View
+    GET /viewevent/<id>/
+
+
+
+- 🧾 Media
+  Uploaded media files are accessible via:
+
+
+  /media/<filename>
+  
+  Make sure media is properly configured on the server.
+  
+
+- Pagination
+  All list endpoints use page number pagination.
+  Example:
+  
+  
+  GET /feed_/?page=2
+
+
+- Status Codes
+  200 OK – Success
+  
+  
+  201 Created – Resource created
+  
+  
+  400 Bad Request – Validation error
+  
+  
+  401 Unauthorized – Token missing or invalid
+  
+  
+  404 Not Found – Resource doesn’t exist
+
+
+
+**Notes:**
+  CORS is enabled for all origins in development.
+  
+  
+  Ensure static and media files are served correctly in production.
+  
+  
+  
+  Contact
+  For any issues or improvements, please contact me at @ephrem007 on telegram or discord
+
+✨ Thank you for using the African Cultural Exchange Platform!
+
+
