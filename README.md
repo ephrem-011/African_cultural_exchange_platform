@@ -47,8 +47,8 @@ This project is aimed to grow in a great scale for the future by including featu
   Returns auth token and user id
 
 - Profile
-  GET /mydashboard<id>/
 
+  GET /mydashboard<id>/
 
   PUT /edituser/<id>/ (Update user info)
 
