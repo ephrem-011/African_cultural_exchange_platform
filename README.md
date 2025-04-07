@@ -1,6 +1,6 @@
 
 **Back end for African cultural exchange platform**
-This platform allows users from different cultures or regions to share unique knowledge, experiences, and traditions. The idea is to connect people across our continent and encourage learning about each other's cultures, languages, food, festivals, arts, and history.
+This is an API built with Django REST framework for African cultural exchange platform. This platform allows users from different cultures or regions to share unique knowledge, experiences, and traditions. The idea is to connect people across our continent and encourage learning about each other's cultures, languages, food, festivals, arts, and history.
 
 **Key Features:**
 
